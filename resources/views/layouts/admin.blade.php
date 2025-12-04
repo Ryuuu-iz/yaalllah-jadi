@@ -40,7 +40,7 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="sidebar w-64 bg-gradient-to-b from-blue-600 to-blue-800 text-white flex-shrink-0 relative">
             <!-- Toggle Button -->
-            <button onclick="toggleSidebar()" class="absolute -right-3 top-6 bg-blue-600 text-white rounded-full p-1 shadow-lg hover:bg-blue-700 z-50">
+            <button onclick="toggleSidebar()" class="absolute -right-3   top-6 bg-blue-600 text-white rounded-full p-1 shadow-lg hover:bg-blue-700 z-50">
                 <svg id="toggle-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>

@@ -15,7 +15,27 @@ view untuk admin pada bagian users sepertinya udah, namun masih banyak bug misal
 untuk sekarang hanya itu
 
 02/12/2025 5:51 PM
-view udah oke, sisa memperbaiki sidebar biar bisa dibuka tutup, navbar juga dan menambahkan beberapa fitur untuk admin, seperti add subject belum bisa, attendance management juga belum bisa
+view udah oke, sisa memperbaiki sidebar biar bisa dibuka tutup, navbar hilangkan dan menambahkan beberapa fitur untuk admin, seperti add subject belum bisa, attendance management juga belum bisa
 apa yang bisa guru lakukan juga bisa dilakukan oleh admin
 add user masih ngebug karena filed nama dan nisn/nip tidak muncul pada ui
 ingin menambahkan fitur profile disemua role, agar bisa mengedit informasi pribadi seperti nama, nip, nisn, password.
+
+04/12/2025 9:03 AM
+menambahkan controller matapelajaran (admin) dan views admin/subjects/index (create/edit belum)
+bug ui di user masih ada yaitu field nama nins/nip tidak muncul
+add class harusnya menambahkan kelas, bukan course 
+add subject (mapel) sudah bisa namun route shortcutnya di dashboard belum diubah
+ingin menambahkan fitur profile disemua role, agar bisa mengedit informasi pribadi seperti nama, nip, nisn, password.
+kehadiran, tugas, materi controller does not exist (viewsnya juga doesnt exist)
+dan mungkin mengubah tulisan LMS menjadi logo dan saat di klik akan menuju ke halaman dashboard
+revisi pada sidebar harusnya ketika academic management di klik akanm memunculkan sub menu untuk manejemen course (tambahkan juga untuk mengsest tahun ajaran (status aktif/tidak aktif)), manajemen kelas, manajemen mapel
+
+04/12/2025 9:14 PM
+terakhir di attendance (index)
+lanjut kembali nanti, lihat di dokementasi sebelumnya yang dilanjut
+
+05/12/2025 6:33 AM
+baru mau mengubah tulisan LMS menjadi logo dan saat di klik akan menuju ke halaman dashboard
+revisi pada sidebar harusnya ketika academic management di klik akanm memunculkan sub menu untuk manejemen course (tambahkan juga untuk mengsest tahun ajaran (status aktif/tidak aktif)), manajemen kelas, manajemen mapel
+btw masih ngebug add user
+masih banyak yang belum, baca dokumentasi 04/12/2025 9:03 
