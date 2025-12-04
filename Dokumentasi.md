@@ -16,5 +16,6 @@ untuk sekarang hanya itu
 
 02/12/2025 5:51 PM
 view udah oke, sisa memperbaiki sidebar biar bisa dibuka tutup, navbar juga dan menambahkan beberapa fitur untuk admin, seperti add subject belum bisa, attendance management juga belum bisa
+apa yang bisa guru lakukan juga bisa dilakukan oleh admin
 add user masih ngebug karena filed nama dan nisn/nip tidak muncul pada ui
-ingin menambahkan fitur profile disemua role, agar bisa informasi pribadi seperti nama, nip, nisn, password.
+ingin menambahkan fitur profile disemua role, agar bisa mengedit informasi pribadi seperti nama, nip, nisn, password.

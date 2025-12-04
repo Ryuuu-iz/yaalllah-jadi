@@ -57,8 +57,10 @@
             </div>
 
             <!-- Nama (for Guru and Siswa) -->
-            <div class="mb-4" id="nama-field" style="display: {{ old('role') && old('role') != 'admin' ? 'block' : 'none' }};">
-                <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Full Name <span class="text-red-500" id="nama-required">*</span></label>
+            <div class="mb-4" id="nama-field">
+                <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">
+                    Full Name <span class="text-red-500">*</span>
+                </label>
                 <input type="text" name="nama" id="nama" value="{{ old('nama') }}"
                     class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('nama') border-red-500 @enderror">
                 @error('nama')
@@ -67,8 +69,10 @@
             </div>
 
             <!-- NIP (for Guru) -->
-            <div class="mb-4" id="nip-field" style="display: {{ old('role') == 'guru' ? 'block' : 'none' }};">
-                <label for="nip" class="block text-sm font-medium text-gray-700 mb-2">NIP <span class="text-red-500" id="nip-required">*</span></label>
+            <div class="mb-4" id="nip-field">
+                <label for="nip" class="block text-sm font-medium text-gray-700 mb-2">
+                    NIP <span class="text-red-500">*</span>
+                </label>
                 <input type="text" name="nip" id="nip" value="{{ old('nip') }}"
                     class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('nip') border-red-500 @enderror">
                 @error('nip')
@@ -77,8 +81,10 @@
             </div>
 
             <!-- NISN (for Siswa) -->
-            <div class="mb-4" id="nisn-field" style="display: {{ old('role') == 'siswa' ? 'block' : 'none' }};">
-                <label for="nisn" class="block text-sm font-medium text-gray-700 mb-2">NISN <span class="text-red-500" id="nisn-required">*</span></label>
+            <div class="mb-4" id="nisn-field">
+                <label for="nisn" class="block text-sm font-medium text-gray-700 mb-2">
+                    NISN <span class="text-red-500">*</span>
+                </label>
                 <input type="text" name="nisn" id="nisn" value="{{ old('nisn') }}"
                     class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('nisn') border-red-500 @enderror">
                 @error('nisn')
@@ -137,5 +143,8 @@ function toggleRoleFields() {
 document.addEventListener('DOMContentLoaded', function() {
     toggleRoleFields();
 });
+
+// Also trigger on role change
+document.getElementById('role').addEventListener('change', toggleRoleFields);
 </script>
 @endsection
