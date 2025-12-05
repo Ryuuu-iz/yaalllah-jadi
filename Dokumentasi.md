@@ -38,4 +38,10 @@ lanjut kembali nanti, lihat di dokementasi sebelumnya yang dilanjut
 baru mau mengubah tulisan LMS menjadi logo dan saat di klik akan menuju ke halaman dashboard
 revisi pada sidebar harusnya ketika academic management di klik akanm memunculkan sub menu untuk manejemen course (tambahkan juga untuk mengsest tahun ajaran (status aktif/tidak aktif)), manajemen kelas, manajemen mapel
 btw masih ngebug add user
-masih banyak yang belum, baca dokumentasi 04/12/2025 9:03 
+masih banyak yang belum, baca dokumentasi 04/12/2025 9:03
+
+05/12/2025 11:11 AM
+create class, academic-years create done
+
+05/12/2025 11:11 AM
+sekarang role siswa 

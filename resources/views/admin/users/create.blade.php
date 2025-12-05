@@ -47,7 +47,6 @@
                 <select name="role" id="role" required onchange="toggleRoleFields()"
                     class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('role') border-red-500 @enderror">
                     <option value="">Select Role</option>
-                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     <option value="guru" {{ old('role') == 'guru' ? 'selected' : '' }}>Guru</option>
                     <option value="siswa" {{ old('role') == 'siswa' ? 'selected' : '' }}>Siswa</option>
                 </select>

@@ -98,7 +98,7 @@
             <p class="text-blue-700 font-semibold">Add User</p>
         </a>
 
-        <a href="{{ route('admin.courses.create') }}" class="bg-green-50 hover:bg-green-100 rounded-xl p-6 text-center transition-all duration-200 transform hover:scale-105">
+        <a href="{{ route('admin.classes.create') }}" class="bg-green-50 hover:bg-green-100 rounded-xl p-6 text-center transition-all duration-200 transform hover:scale-105">
             <div class="flex justify-center mb-3">
                 <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -107,7 +107,7 @@
             <p class="text-green-700 font-semibold">Create Class</p>
         </a>
 
-        <a href="#" class="bg-purple-50 hover:bg-purple-100 rounded-xl p-6 text-center transition-all duration-200 transform hover:scale-105">
+        <a href="{{ route('admin.attendance.index') }}" class="bg-purple-50 hover:bg-purple-100 rounded-xl p-6 text-center transition-all duration-200 transform hover:scale-105">
             <div class="flex justify-center mb-3">
                 <svg class="w-12 h-12 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
@@ -116,7 +116,7 @@
             <p class="text-purple-700 font-semibold">Attendance Recap</p>
         </a>
 
-        <a href="#" class="bg-yellow-50 hover:bg-yellow-100 rounded-xl p-6 text-center transition-all duration-200 transform hover:scale-105">
+        <a href="{{ route('admin.subjects.create') }}" class="bg-yellow-50 hover:bg-yellow-100 rounded-xl p-6 text-center transition-all duration-200 transform hover:scale-105">
             <div class="flex justify-center mb-3">
                 <svg class="w-12 h-12 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
@@ -131,7 +131,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
             </div>
-            <p class="text-red-700 font-semibold">Add User</p>
+            <p class="text-red-700 font-semibold">Set Academic-Year</p>
         </a>
     </div>
 </div>
