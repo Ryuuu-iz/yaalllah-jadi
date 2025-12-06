@@ -45,3 +45,10 @@ create class, academic-years create done
 
 05/12/2025 11:11 AM
 sekarang role siswa 
+
+06/12/2025 8:58 AM
+role siswa
+dashboard siswa udah dibikin walau tampilannya agak agak yah, edit controller course dan dahsboard tadi.
+terus nambahin view di partials/footers, dan navbar.
+sekarang mau mengubah option teacher di navbar agar sesuai kemauan awal
+jangan lupa fitur profile hehe

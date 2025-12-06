@@ -22,6 +22,7 @@
     use App\Http\Controllers\Siswa\CourseController as SiswaCourseController;
     use App\Http\Controllers\Siswa\TugasController as SiswaTugasController;
     use App\Http\Controllers\Siswa\AbsensiController as SiswaAbsensiController;
+    use App\Http\Controllers\Siswa\GuruController as SiswaGuruController;
 
     // Public routes
     Route::get('/', function () {
@@ -115,6 +116,9 @@
     // Siswa routes
     Route::middleware(['auth', 'role:siswa'])->prefix('siswa')->name('siswa.')->group(function () {
         Route::get('/dashboard', [SiswaDashboard::class, 'index'])->name('dashboard');
+
+        Route::get('/teachers', [SiswaGuruController::class, 'index'])->name('teachers.index');
+        Route::get('/teachers/{teacher}', [SiswaGuruController::class, 'show'])->name('teachers.show');
         
         // Course Management
         Route::get('/courses', [SiswaCourseController::class, 'index'])->name('courses.index');
