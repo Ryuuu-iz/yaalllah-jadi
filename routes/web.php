@@ -73,10 +73,8 @@
         Route::get('/tasks/{task}/submissions', [AdminTaskController::class, 'submissions'])->name('tasks.submissions');
         
         // Material Management
-        Route::get('/materials', [AdminMaterialController::class, 'index'])->name('materials.index');
-        Route::get('/materials/{material}', [AdminMaterialController::class, 'show'])->name('materials.show');
-        Route::delete('/materials/{material}', [AdminMaterialController::class, 'destroy'])->name('materials.destroy');
-        
+       Route::resource('materials', AdminMaterialController::class);
+
         // Profile
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');

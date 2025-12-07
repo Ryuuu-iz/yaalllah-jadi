@@ -52,3 +52,16 @@ dashboard siswa udah dibikin walau tampilannya agak agak yah, edit controller co
 terus nambahin view di partials/footers, dan navbar.
 sekarang mau mengubah option teacher di navbar agar sesuai kemauan awal
 jangan lupa fitur profile hehe
+
+06/12/2025 
+role siswa (done)
+dashboard siswa udah dibikin walau tampilannya agak agak yah, edit controller course dan dahsboard tadi. (done)
+terus nambahin view di partials/footers, dan navbar. (done)
+sekarang mau mengubah option teacher di navbar agar sesuai kemauan awal (done)
+jangan lupa fitur profile (belum)
+material create, show, edit blade admin, ini keknya dengan kontroller deh(belum)
+tasks create, edit blade admin, ini keknya dengan kontrolxhler deh (belum)
+
+07/12/2025
+material create, show, edit blade admin, ini keknya dengan kontroller deh(done)
+tasks create, edit blade admin, ini keknya dengan kontrolxhler deh (belum)

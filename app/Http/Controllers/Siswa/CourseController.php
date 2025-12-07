@@ -28,7 +28,7 @@ class CourseController extends Controller
         $siswa = auth()->user()->dataSiswa;
 
         // Cek apakah sudah terdaftar
-        if ($siswa->courses()->where('id_course', $course->id_course)->exists()) {
+        if ($siswa->courses()->where('course.id_course', $course->id_course)->exists()) {
             return back()->with('error', 'Anda sudah terdaftar di course ini');
         }
 
