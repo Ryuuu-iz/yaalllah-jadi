@@ -67,13 +67,11 @@
         Route::get('/attendance/export', [AdminAttendanceController::class, 'export'])->name('attendance.export');
         
         // Task Management
-        Route::get('/tasks', [AdminTaskController::class, 'index'])->name('tasks.index');
-        Route::get('/tasks/{task}', [AdminTaskController::class, 'show'])->name('tasks.show');
-        Route::delete('/tasks/{task}', [AdminTaskController::class, 'destroy'])->name('tasks.destroy');
+        Route::resource('tasks', AdminTaskController::class);
         Route::get('/tasks/{task}/submissions', [AdminTaskController::class, 'submissions'])->name('tasks.submissions');
         
         // Material Management
-       Route::resource('materials', AdminMaterialController::class);
+        Route::resource('materials', AdminMaterialController::class);
 
         // Profile
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

@@ -141,23 +141,30 @@ class AbsensiController extends Controller
      */
     public function edit(Request $request)
     {
-        $validated = $request->validate([
+        // Validate input dari query string
+        $request->validate([
             'id_course' => 'required|exists:course,id_course',
             'tanggal' => 'required|date',
         ]);
         
         $course = Course::with(['siswa', 'kelas', 'mataPelajaran', 'guru'])
-                       ->findOrFail($validated['id_course']);
+                       ->findOrFail($request->id_course);
         
         // Ambil data absensi yang sudah ada
         $absensiData = RekapAbsensi::where('id_kelas', $course->id_kelas)
                                   ->where('id_mapel', $course->id_mapel)
                                   ->where('id_guru', $course->id_guru)
-                                  ->whereDate('tanggal', $validated['tanggal'])
+                                  ->whereDate('tanggal', $request->tanggal)
                                   ->get()
                                   ->keyBy('id_siswa');
         
         $courses = Course::with(['mataPelajaran', 'kelas'])->get();
+        
+        // Kirim data yang divalidasi
+        $validated = [
+            'id_course' => $request->id_course,
+            'tanggal' => $request->tanggal
+        ];
         
         return view('admin.attendance.edit', compact('course', 'absensiData', 'courses', 'validated'));
     }
@@ -210,12 +217,12 @@ class AbsensiController extends Controller
             'id_mapel' => 'required|exists:mata_pelajaran,id_mapel',
         ]);
 
-        RekapAbsensi::where('tanggal', $validated['tanggal'])
-                   ->where('id_kelas', $validated['id_kelas'])
-                   ->where('id_mapel', $validated['id_mapel'])
-                   ->delete();
+        $deletedCount = RekapAbsensi::where('tanggal', $validated['tanggal'])
+                                    ->where('id_kelas', $validated['id_kelas'])
+                                    ->where('id_mapel', $validated['id_mapel'])
+                                    ->delete();
 
         return redirect()->route('admin.attendance.index')
-                        ->with('success', 'Attendance records berhasil dihapus');
+                        ->with('success', "Successfully deleted {$deletedCount} attendance records");
     }
 }

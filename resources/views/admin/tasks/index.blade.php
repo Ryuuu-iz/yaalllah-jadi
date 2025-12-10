@@ -4,7 +4,15 @@
 
 @section('content')
 <div class="px-4 py-6 sm:px-0">
-    <h1 class="text-3xl font-bold text-gray-900 mb-6">Task Management</h1>
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Task Management</h1>
+        <a href="{{ route('admin.tasks.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center transition-colors">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Add New Task
+        </a>
+    </div>
 
     <!-- Filters -->
     <div class="bg-white shadow rounded-lg p-4 mb-6">
@@ -84,6 +92,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <a href="{{ route('admin.tasks.show', $task->id_tugas) }}" class="text-green-600 hover:text-green-900 mr-3">View</a>
+                        <a href="{{ route('admin.tasks.edit', $task->id_tugas) }}" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
                         <form action="{{ route('admin.tasks.destroy', $task->id_tugas) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this task?')">
                             @csrf
                             @method('DELETE')

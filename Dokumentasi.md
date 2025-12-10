@@ -63,5 +63,10 @@ material create, show, edit blade admin, ini keknya dengan kontroller deh(belum)
 tasks create, edit blade admin, ini keknya dengan kontrolxhler deh (belum)
 
 07/12/2025
-material create, show, edit blade admin, ini keknya dengan kontroller deh(done)
-tasks create, edit blade admin, ini keknya dengan kontrolxhler deh (belum)
+material create, show, edit blade admin, ini keknya dengan kontroller deh(done tpi button add material ndada wkwk)
+tasks create, edit blade admin, ini keknya dengan kontroller deh (done)
+attendance admin ngebug (udah di fix cuman ui nya jelek, nanti ganti)
+
+10/12/2025
+attendance admin ngebug (udah di fix cuman ui nya jelek, nanti ganti)
+attendance admin dan siswa, edit absensinya dimana admin bisa membuat absensi, dan siswa bisa mengabsen dirinya sendiri ketika dibuatkan absensi. (belum)

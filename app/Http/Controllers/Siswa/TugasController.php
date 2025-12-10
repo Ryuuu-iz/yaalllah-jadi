@@ -26,7 +26,7 @@ class TugasController extends Controller
         $siswa = auth()->user()->dataSiswa;
         
         // Cek apakah siswa terdaftar di course ini
-        if (!$siswa->courses()->where('id_course', $tugas->id_course)->exists()) {
+        if (!$siswa->courses()->where('course.id_course', $tugas->id_course)->exists()) {
             abort(403, 'Anda tidak terdaftar di course ini');
         }
         

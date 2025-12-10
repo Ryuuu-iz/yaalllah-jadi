@@ -100,4 +100,86 @@ class TugasController extends Controller
 
         return view('admin.tasks.submissions', compact('task', 'submissions'));
     }
+
+    public function create()
+{
+    $courses = Course::with(['mataPelajaran', 'kelas', 'guru', 'materiPembelajaran'])->get();
+    
+    return view('admin.tasks.create', compact('courses'));
+}
+
+/**
+ * Store a newly created task
+ */
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nama_tugas' => 'required|string|max:255',
+        'desk_tugas' => 'nullable|string',
+        'file_tugas' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+        'deadline' => 'required|date',
+        'id_course' => 'required|exists:course,id_course',
+        'id_materi' => 'required|exists:materi_pembelajaran,id_materi',
+    ]);
+    
+    // Set upload date
+    $validated['tgl_upload'] = now()->format('Y-m-d');
+    
+    // Upload file if exists
+    if ($request->hasFile('file_tugas')) {
+        $file = $request->file('file_tugas');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('tugas', $filename, 'public');
+        $validated['file_tugas'] = $path;
+    }
+    
+    Tugas::create($validated);
+    
+    return redirect()->route('admin.tasks.index')
+                    ->with('success', 'Task successfully created');
+}
+
+/**
+ * Show the form for editing the specified task
+ */
+public function edit(Tugas $task)
+{
+    $task->load(['course.materiPembelajaran', 'pengumpulanTugas']);
+    $courses = Course::with(['mataPelajaran', 'kelas', 'guru', 'materiPembelajaran'])->get();
+    
+    return view('admin.tasks.edit', compact('task', 'courses'));
+}
+
+/**
+ * Update the specified task
+ */
+public function update(Request $request, Tugas $task)
+{
+    $validated = $request->validate([
+        'nama_tugas' => 'required|string|max:255',
+        'desk_tugas' => 'nullable|string',
+        'file_tugas' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
+        'deadline' => 'required|date',
+        'id_course' => 'required|exists:course,id_course',
+        'id_materi' => 'required|exists:materi_pembelajaran,id_materi',
+    ]);
+    
+    // Upload new file if exists
+    if ($request->hasFile('file_tugas')) {
+        // Delete old file if exists
+        if ($task->file_tugas && \Storage::disk('public')->exists($task->file_tugas)) {
+            \Storage::disk('public')->delete($task->file_tugas);
+        }
+        
+        $file = $request->file('file_tugas');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('tugas', $filename, 'public');
+        $validated['file_tugas'] = $path;
+    }
+    
+    $task->update($validated);
+    
+    return redirect()->route('admin.tasks.show', $task->id_tugas)
+                    ->with('success', 'Task successfully updated');
+}
 }
