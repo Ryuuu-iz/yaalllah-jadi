@@ -11,7 +11,10 @@ class RekapAbsensi extends Model
 
     protected $fillable = [
         'tanggal',
+        'deadline',
+        'is_open',
         'status_absensi',
+        'keterangan',
         'id_siswa',
         'id_kelas',
         'id_guru',
@@ -20,6 +23,8 @@ class RekapAbsensi extends Model
 
     protected $casts = [
         'tanggal' => 'date',
+        'deadline' => 'datetime',
+        'is_open' => 'boolean',
     ];
 
     // Relasi
@@ -41,5 +46,16 @@ class RekapAbsensi extends Model
     public function mataPelajaran()
     {
         return $this->belongsTo(MataPelajaran::class, 'id_mapel', 'id_mapel');
+    }
+
+    // Helper methods
+    public function isExpired()
+    {
+        return $this->deadline && now()->isAfter($this->deadline);
+    }
+
+    public function canSubmit()
+    {
+        return $this->is_open && !$this->isExpired();
     }
 }

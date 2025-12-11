@@ -8,40 +8,77 @@ use Illuminate\Http\Request;
 
 class AbsensiController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Submit attendance (siswa absen mandiri)
+     */
+    public function submit(Request $request)
     {
+        $validated = $request->validate([
+            'id_absensi' => 'required|exists:rekap_absensi,id_absensi',
+            'keterangan' => 'nullable|string|max:500',
+        ]);
+
         $siswa = auth()->user()->dataSiswa;
         
-        $query = RekapAbsensi::where('id_siswa', $siswa->id_siswa)
-                            ->with(['kelas', 'guru', 'mataPelajaran']);
-        
-        // Filter berdasarkan bulan
-        if ($request->filled('bulan')) {
-            $query->whereMonth('tanggal', $request->bulan);
+        $absensi = RekapAbsensi::where('id_absensi', $validated['id_absensi'])
+                              ->where('id_siswa', $siswa->id_siswa)
+                              ->firstOrFail();
+
+        // Cek apakah masih bisa absen
+        if (!$absensi->canSubmit()) {
+            if ($absensi->isExpired()) {
+                return back()->with('error', 'Waktu absensi telah berakhir');
+            }
+            return back()->with('error', 'Absensi sudah ditutup');
         }
-        
-        // Filter berdasarkan tahun
-        if ($request->filled('tahun')) {
-            $query->whereYear('tanggal', $request->tahun);
+
+        // Cek apakah sudah absen
+        if ($absensi->status_absensi !== 'alpha') {
+            return back()->with('error', 'Anda sudah melakukan absensi');
         }
+
+        // Update status menjadi hadir
+        $absensi->update([
+            'status_absensi' => 'hadir',
+            'keterangan' => $validated['keterangan'] ?? null,
+        ]);
+
+        return back()->with('success', 'Absensi berhasil! Status Anda: Hadir');
+    }
+
+    /**
+     * Request permission atau sakit (dengan keterangan)
+     */
+    public function requestPermission(Request $request)
+    {
+        $validated = $request->validate([
+            'id_absensi' => 'required|exists:rekap_absensi,id_absensi',
+            'status' => 'required|in:izin,sakit',
+            'keterangan' => 'required|string|max:500',
+        ]);
+
+        $siswa = auth()->user()->dataSiswa;
         
-        $absensi = $query->orderBy('tanggal', 'desc')->paginate(20);
+        $absensi = RekapAbsensi::where('id_absensi', $validated['id_absensi'])
+                              ->where('id_siswa', $siswa->id_siswa)
+                              ->firstOrFail();
+
+        // Cek apakah masih bisa submit
+        if (!$absensi->canSubmit()) {
+            if ($absensi->isExpired()) {
+                return back()->with('error', 'Waktu absensi telah berakhir');
+            }
+            return back()->with('error', 'Absensi sudah ditutup');
+        }
+
+        // Update status
+        $absensi->update([
+            'status_absensi' => $validated['status'],
+            'keterangan' => $validated['keterangan'],
+        ]);
+
+        $statusText = $validated['status'] === 'izin' ? 'Izin' : 'Sakit';
         
-        // Statistik
-        $stats = RekapAbsensi::where('id_siswa', $siswa->id_siswa)
-                            ->selectRaw('status_absensi, COUNT(*) as total')
-                            ->groupBy('status_absensi')
-                            ->pluck('total', 'status_absensi');
-        
-        // Statistik per bulan (6 bulan terakhir)
-        $monthlyStats = RekapAbsensi::where('id_siswa', $siswa->id_siswa)
-                                   ->where('tanggal', '>=', now()->subMonths(6))
-                                   ->selectRaw('MONTH(tanggal) as bulan, YEAR(tanggal) as tahun, status_absensi, COUNT(*) as total')
-                                   ->groupBy('bulan', 'tahun', 'status_absensi')
-                                   ->orderBy('tahun', 'desc')
-                                   ->orderBy('bulan', 'desc')
-                                   ->get();
-        
-        return view('siswa.absensi.index', compact('absensi', 'stats', 'monthlyStats'));
+        return back()->with('success', "Pengajuan {$statusText} berhasil dikirim");
     }
 }

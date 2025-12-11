@@ -69,4 +69,17 @@ attendance admin ngebug (udah di fix cuman ui nya jelek, nanti ganti)
 
 10/12/2025
 attendance admin ngebug (udah di fix cuman ui nya jelek, nanti ganti)
+material create, show, edit blade admin, ini keknya dengan kontroller deh(done tpi button add material ndada wkwk)
 attendance admin dan siswa, edit absensinya dimana admin bisa membuat absensi, dan siswa bisa mengabsen dirinya sendiri ketika dibuatkan absensi. (belum)
+
+11/12/2025 8:51 PM
+attendance admin ngebug (ui nya masih jelek)
+attendance admin dan siswa, edit absensinya dimana admin bisa membuat absensi, dan siswa bisa mengabsen dirinya sendiri ketika dibuatkan absensi. (done, cuman ada error Please fix the following errors: The selected absensi.1 is invalid.)
+material create, show, edit blade admin, ini keknya dengan kontroller deh(done tpi button add material ndada wkwk)
+pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah absensinya
+
+11/12/2025 5:10 PM
+attendance admin ngebug (ui nya masih jelek)
+attendance admin dan siswa, edit absensinya dimana admin bisa membuat absensi, dan siswa bisa mengabsen dirinya sendiri ketika dibuatkan absensi. (done)
+material create, show, edit blade admin, ini keknya dengan kontroller deh(done, tpi button add material ndada wkwk)
+pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah absensinya

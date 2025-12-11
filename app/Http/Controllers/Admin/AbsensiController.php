@@ -7,14 +7,10 @@ use App\Models\RekapAbsensi;
 use App\Models\Course;
 use App\Models\Kelas;
 use App\Models\MataPelajaran;
-use App\Models\DataGuru;
 use Illuminate\Http\Request;
 
 class AbsensiController extends Controller
 {
-    /**
-     * Display a listing of attendance records
-     */
     public function index(Request $request)
     {
         $query = RekapAbsensi::with(['siswa', 'kelas', 'guru', 'mataPelajaran']);
@@ -54,32 +50,6 @@ class AbsensiController extends Controller
         return view('admin.attendance.index', compact('absensi', 'kelas', 'mataPelajaran', 'stats'));
     }
 
-    /**
-     * Show attendance details for a specific date and course
-     */
-    public function show(Request $request)
-    {
-        $validated = $request->validate([
-            'tanggal' => 'required|date',
-            'id_kelas' => 'required|exists:kelas,id_kelas',
-            'id_mapel' => 'required|exists:mata_pelajaran,id_mapel',
-        ]);
-
-        $absensi = RekapAbsensi::with(['siswa', 'guru'])
-                              ->where('tanggal', $validated['tanggal'])
-                              ->where('id_kelas', $validated['id_kelas'])
-                              ->where('id_mapel', $validated['id_mapel'])
-                              ->get();
-
-        $kelas = Kelas::findOrFail($validated['id_kelas']);
-        $mataPelajaran = MataPelajaran::findOrFail($validated['id_mapel']);
-
-        return view('admin.attendance.show', compact('absensi', 'kelas', 'mataPelajaran', 'validated'));
-    }
-
-    /**
-     * Show the form for creating attendance
-     */
     public function create(Request $request)
     {
         $courses = Course::with(['mataPelajaran', 'kelas', 'siswa', 'guru'])->get();
@@ -96,17 +66,22 @@ class AbsensiController extends Controller
         return view('admin.attendance.create', compact('courses', 'selectedCourse', 'siswaList'));
     }
 
-    /**
-     * Store attendance records
-     */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'id_course' => 'required|exists:course,id_course',
             'tanggal' => 'required|date',
-            'absensi' => 'required|array',
-            'absensi.*' => 'required|in:hadir,izin,sakit,alpha',
-        ]);
+            'deadline' => 'required|date|after:tanggal',
+            'mode' => 'required|in:manual,self',
+        ];
+
+        // Add validation for absensi only in manual mode
+        if ($request->input('mode') === 'manual') {
+            $rules['absensi'] = 'required|array';
+            $rules['absensi.*'] = 'required|in:hadir,izin,sakit,alpha';
+        }
+
+        $validated = $request->validate($rules);
         
         $course = Course::findOrFail($validated['id_course']);
         
@@ -121,27 +96,43 @@ class AbsensiController extends Controller
             return back()->with('error', 'Absensi untuk tanggal ini sudah ada');
         }
         
-        // Simpan absensi untuk setiap siswa
-        foreach ($validated['absensi'] as $id_siswa => $status) {
-            RekapAbsensi::create([
-                'tanggal' => $validated['tanggal'],
-                'status_absensi' => $status,
-                'id_siswa' => $id_siswa,
-                'id_kelas' => $course->id_kelas,
-                'id_guru' => $course->id_guru,
-                'id_mapel' => $course->id_mapel,
-            ]);
+        if ($validated['mode'] === 'manual') {
+            // Mode manual: Admin/Guru input langsung
+            foreach ($validated['absensi'] as $id_siswa => $status) {
+                RekapAbsensi::create([
+                    'tanggal' => $validated['tanggal'],
+                    'deadline' => $validated['deadline'],
+                    'is_open' => false, // Sudah selesai
+                    'status_absensi' => $status,
+                    'id_siswa' => $id_siswa,
+                    'id_kelas' => $course->id_kelas,
+                    'id_guru' => $course->id_guru,
+                    'id_mapel' => $course->id_mapel,
+                ]);
+            }
+        } else {
+            // Mode self: Siswa absen sendiri
+            foreach ($course->siswa as $siswa) {
+                RekapAbsensi::create([
+                    'tanggal' => $validated['tanggal'],
+                    'deadline' => $validated['deadline'],
+                    'is_open' => true, // Masih buka untuk siswa
+                    'status_absensi' => 'alpha', // Default alpha jika tidak absen
+                    'id_siswa' => $siswa->id_siswa,
+                    'id_kelas' => $course->id_kelas,
+                    'id_guru' => $course->id_guru,
+                    'id_mapel' => $course->id_mapel,
+                ]);
+            }
         }
         
-        return redirect()->route('admin.attendance.index')->with('success', 'Absensi berhasil disimpan');
+        return redirect()->route('admin.attendance.index')
+            ->with('success', 'Absensi berhasil dibuat. ' . 
+                ($validated['mode'] === 'self' ? 'Siswa dapat melakukan absensi mandiri sampai ' . \Carbon\Carbon::parse($validated['deadline'])->format('d M Y H:i') : ''));
     }
 
-    /**
-     * Show the form for editing attendance
-     */
     public function edit(Request $request)
     {
-        // Validate input dari query string
         $request->validate([
             'id_course' => 'required|exists:course,id_course',
             'tanggal' => 'required|date',
@@ -160,7 +151,6 @@ class AbsensiController extends Controller
         
         $courses = Course::with(['mataPelajaran', 'kelas'])->get();
         
-        // Kirim data yang divalidasi
         $validated = [
             'id_course' => $request->id_course,
             'tanggal' => $request->tanggal
@@ -169,46 +159,75 @@ class AbsensiController extends Controller
         return view('admin.attendance.edit', compact('course', 'absensiData', 'courses', 'validated'));
     }
 
-    /**
-     * Update attendance records
-     */
     public function update(Request $request)
     {
         $validated = $request->validate([
             'id_course' => 'required|exists:course,id_course',
             'tanggal' => 'required|date',
+            'deadline' => 'nullable|date|after:tanggal',
+            'is_open' => 'nullable|boolean',
             'absensi' => 'required|array',
             'absensi.*' => 'required|in:hadir,izin,sakit,alpha',
         ]);
         
         $course = Course::findOrFail($validated['id_course']);
         
-        // Update absensi yang sudah ada
+        // Update absensi
         foreach ($validated['absensi'] as $id_siswa => $status) {
+            $updateData = ['status_absensi' => $status];
+            
+            if (isset($validated['deadline'])) {
+                $updateData['deadline'] = $validated['deadline'];
+            }
+            
+            if (isset($validated['is_open'])) {
+                $updateData['is_open'] = $validated['is_open'];
+            }
+            
             RekapAbsensi::where('id_kelas', $course->id_kelas)
                        ->where('id_mapel', $course->id_mapel)
                        ->where('id_guru', $course->id_guru)
                        ->where('id_siswa', $id_siswa)
                        ->whereDate('tanggal', $validated['tanggal'])
-                       ->update(['status_absensi' => $status]);
+                       ->update($updateData);
         }
         
         return redirect()->route('admin.attendance.index')->with('success', 'Absensi berhasil diupdate');
     }
 
-    /**
-     * Export attendance report
-     */
-    public function export(Request $request)
+    public function toggleStatus(Request $request)
     {
-        // This can be implemented with Excel/PDF export
-        // For now, we'll just return the view
-        return back()->with('info', 'Export feature coming soon');
+        $validated = $request->validate([
+            'tanggal' => 'required|date',
+            'id_course' => 'required|exists:course,id_course',
+        ]);
+
+        $course = Course::findOrFail($validated['id_course']);
+        
+        $absensiRecords = RekapAbsensi::where('id_kelas', $course->id_kelas)
+                                     ->where('id_mapel', $course->id_mapel)
+                                     ->where('id_guru', $course->id_guru)
+                                     ->whereDate('tanggal', $validated['tanggal'])
+                                     ->get();
+
+        if ($absensiRecords->isEmpty()) {
+            return back()->with('error', 'Tidak ada data absensi ditemukan');
+        }
+
+        $currentStatus = $absensiRecords->first()->is_open;
+        $newStatus = !$currentStatus;
+
+        RekapAbsensi::where('id_kelas', $course->id_kelas)
+                   ->where('id_mapel', $course->id_mapel)
+                   ->where('id_guru', $course->id_guru)
+                   ->whereDate('tanggal', $validated['tanggal'])
+                   ->update(['is_open' => $newStatus]);
+
+        $message = $newStatus ? 'Absensi dibuka kembali untuk siswa' : 'Absensi ditutup';
+        
+        return back()->with('success', $message);
     }
 
-    /**
-     * Delete attendance records for a specific date and course
-     */
     public function destroy(Request $request)
     {
         $validated = $request->validate([
@@ -223,6 +242,6 @@ class AbsensiController extends Controller
                                     ->delete();
 
         return redirect()->route('admin.attendance.index')
-                        ->with('success', "Successfully deleted {$deletedCount} attendance records");
+                        ->with('success', "Berhasil menghapus {$deletedCount} data absensi");
     }
 }

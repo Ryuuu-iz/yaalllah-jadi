@@ -65,6 +65,8 @@
         Route::get('/attendance/show', [AdminAttendanceController::class, 'show'])->name('attendance.show');
         Route::delete('/attendance/destroy', [AdminAttendanceController::class, 'destroy'])->name('attendance.destroy');
         Route::get('/attendance/export', [AdminAttendanceController::class, 'export'])->name('attendance.export');
+        Route::post('/attendance/toggle-status', [AdminAttendanceController::class, 'toggleStatus'])->name('attendance.toggle-status');
+
         
         // Task Management
         Route::resource('tasks', AdminTaskController::class);
@@ -128,6 +130,9 @@
         
         // Attendance
         Route::get('/absensi', [SiswaAbsensiController::class, 'index'])->name('absensi.index');
+        Route::post('/absensi/submit', [SiswaAbsensiController::class, 'submit'])->name('absensi.submit');
+        Route::post('/absensi/request-permission', [SiswaAbsensiController::class, 'requestPermission'])->name('absensi.request-permission');
+
 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
