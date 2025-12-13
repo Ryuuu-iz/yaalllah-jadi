@@ -54,8 +54,59 @@ class RekapAbsensi extends Model
         return $this->deadline && now()->isAfter($this->deadline);
     }
 
+    /**
+     * Cek apakah siswa bisa submit/mengubah absensi
+     * Siswa hanya bisa submit jika:
+     * 1. is_open = true (masih dalam mode self-attendance)
+     * 2. Belum expired (deadline belum lewat)
+     * 3. Status masih 'alpha' (belum diisi oleh siswa sendiri atau guru/admin)
+     */
     public function canSubmit()
     {
-        return $this->is_open && !$this->isExpired();
+        // Jika is_open = false, berarti sudah ditutup atau mode manual
+        if (!$this->is_open) {
+            return false;
+        }
+        
+        // Jika sudah expired
+        if ($this->isExpired()) {
+            return false;
+        }
+        
+        // Jika status bukan alpha, berarti sudah diisi
+        if ($this->status_absensi !== 'alpha') {
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Cek apakah absensi sudah diisi oleh guru/admin
+     * Jika status bukan 'alpha', berarti sudah diubah oleh guru/admin
+     */
+    public function isFilledByTeacher()
+    {
+        return $this->status_absensi !== 'alpha';
+    }
+    
+    /**
+     * Get reason why student cannot submit
+     */
+    public function getCannotSubmitReason()
+    {
+        if (!$this->is_open) {
+            return 'Absensi sudah ditutup oleh guru/admin';
+        }
+        
+        if ($this->isExpired()) {
+            return 'Waktu absensi telah berakhir';
+        }
+        
+        if ($this->status_absensi !== 'alpha') {
+            return 'Absensi Anda sudah tercatat dengan status: ' . ucfirst($this->status_absensi);
+        }
+        
+        return null;
     }
 }

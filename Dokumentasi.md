@@ -82,4 +82,4 @@ pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah abs
 attendance admin ngebug (ui nya masih jelek)
 attendance admin dan siswa, edit absensinya dimana admin bisa membuat absensi, dan siswa bisa mengabsen dirinya sendiri ketika dibuatkan absensi. (done)
 material create, show, edit blade admin, ini keknya dengan kontroller deh(done, tpi button add material ndada wkwk)
-pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah absensinya
+pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah absensinya (bellum)

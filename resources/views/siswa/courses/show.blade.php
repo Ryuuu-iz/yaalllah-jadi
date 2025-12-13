@@ -348,86 +348,136 @@
                         @endforeach
                     </div>
 
-                    <!-- Tambahan: Quick self-attendance box jika ada sesi terbuka -->
+                    <!-- Tambahan: Quick self-attendance box jika ada sesi terbuka atau sudah diisi -->
                     @if($attendances->isNotEmpty())
                         @php
-                            $openAttendance = $attendances->where('is_open', true)
-                                                         ->where('status_absensi', 'alpha')
-                                                         ->where('deadline', '>=', now())
-                                                         ->first();
+                            // Cari absensi yang relevan (baik yang masih bisa diisi atau yang sudah diisi)
+                            $relevantAttendance = $attendances->where('tanggal', '>=', now()->subDays(7))
+                                                            ->sortByDesc('tanggal')
+                                                            ->first();
                         @endphp
 
-                        @if($openAttendance)
-                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-                            <div class="flex items-start">
-                                <svg class="h-6 w-6 text-yellow-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                                </svg>
-                                <div class="flex-1">
-                                    <h3 class="text-sm font-medium text-yellow-800">Absensi Terbuka!</h3>
-                                    <p class="text-sm text-yellow-700 mt-1">
-                                        Deadline: <strong>{{ $openAttendance->deadline->format('d M Y, H:i') }}</strong>
-                                        ({{ $openAttendance->deadline->diffForHumans() }})
-                                    </p>
+                        @if($relevantAttendance)
+                            @if($relevantAttendance->canSubmit())
+                            <!-- Absensi masih bisa diisi - siswa bisa submit -->
+                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded-r-lg">
+                                <div class="flex items-start">
+                                    <svg class="h-6 w-6 text-yellow-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h3 class="text-sm font-medium text-yellow-800">⏰ Absensi Terbuka!</h3>
+                                        <p class="text-sm text-yellow-700 mt-1">
+                                            Tanggal: <strong>{{ $relevantAttendance->tanggal->format('d M Y') }}</strong>
+                                        </p>
+                                        <p class="text-sm text-yellow-700">
+                                            Deadline: <strong>{{ $relevantAttendance->deadline->format('d M Y, H:i') }}</strong>
+                                            <span class="text-xs">({{ $relevantAttendance->deadline->diffForHumans() }})</span>
+                                        </p>
 
-                                    <!-- Quick Attend Button -->
-                                    <form action="{{ route('siswa.absensi.submit') }}" method="POST" class="mt-3">
-                                        @csrf
-                                        <input type="hidden" name="id_absensi" value="{{ $openAttendance->id_absensi }}">
-                                        <button type="submit" 
-                                                onclick="return confirm('Konfirmasi kehadiran Anda?')"
-                                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                                            ✓ Saya Hadir
+                                        <!-- Quick Attend Button -->
+                                        <form action="{{ route('siswa.absensi.submit') }}" method="POST" class="mt-3">
+                                            @csrf
+                                            <input type="hidden" name="id_absensi" value="{{ $relevantAttendance->id_absensi }}">
+                                            <button type="submit" 
+                                                    onclick="return confirm('Konfirmasi kehadiran Anda?')"
+                                                    class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                                                ✓ Saya Hadir
+                                            </button>
+                                        </form>
+
+                                        <!-- Permission/Sick Request -->
+                                        <button @click="$refs.permissionForm{{ $relevantAttendance->id_absensi }}.classList.toggle('hidden')" 
+                                                class="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                            Ajukan Izin/Sakit
                                         </button>
-                                    </form>
 
-                                    <!-- Permission/Sick Request -->
-                                    <button @click="$refs.permissionForm{{ $openAttendance->id_absensi }}.classList.toggle('hidden')" 
-                                            class="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                        Ajukan Izin/Sakit
-                                    </button>
+                                        <form x-ref="permissionForm{{ $relevantAttendance->id_absensi }}" 
+                                            action="{{ route('siswa.absensi.request-permission') }}" 
+                                            method="POST" 
+                                            class="hidden mt-4 bg-white rounded-lg p-4 border border-yellow-200 shadow-sm">
+                                            @csrf
+                                            <input type="hidden" name="id_absensi" value="{{ $relevantAttendance->id_absensi }}">
 
-                                    <form x-ref="permissionForm{{ $openAttendance->id_absensi }}" 
-                                          action="{{ route('siswa.absensi.request-permission') }}" 
-                                          method="POST" 
-                                          class="hidden mt-4 bg-white rounded-lg p-4 border border-gray-200">
-                                        @csrf
-                                        <input type="hidden" name="id_absensi" value="{{ $openAttendance->id_absensi }}">
-
-                                        <div class="space-y-3">
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-2">Alasan</label>
-                                                <select name="status" required class="w-full border-gray-300 rounded-lg">
-                                                    <option value="">Pilih alasan</option>
-                                                    <option value="izin">Izin</option>
-                                                    <option value="sakit">Sakit</option>
-                                                </select>
+                                            <div class="space-y-3">
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Alasan <span class="text-red-500">*</span></label>
+                                                    <select name="status" required class="w-full border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-500">
+                                                        <option value="">Pilih alasan</option>
+                                                        <option value="izin">Izin</option>
+                                                        <option value="sakit">Sakit</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan <span class="text-red-500">*</span></label>
+                                                    <textarea name="keterangan" rows="3" required
+                                                            class="w-full border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-500"
+                                                            placeholder="Tuliskan alasan Anda secara jelas..."></textarea>
+                                                </div>
+                                                <div class="flex gap-2">
+                                                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                        Kirim Pengajuan
+                                                    </button>
+                                                    <button type="button" 
+                                                            @click="$refs.permissionForm{{ $relevantAttendance->id_absensi }}.classList.add('hidden')"
+                                                            class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                                        Batal
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-2">Keterangan *</label>
-                                                <textarea name="keterangan" rows="3" required
-                                                          class="w-full border-gray-300 rounded-lg"
-                                                          placeholder="Tuliskan alasan Anda..."></textarea>
-                                            </div>
-                                            <div class="flex gap-2">
-                                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
-                                                    Kirim
-                                                </button>
-                                                <button type="button" 
-                                                        @click="$refs.permissionForm{{ $openAttendance->id_absensi }}.classList.add('hidden')"
-                                                        class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg text-sm">
-                                                    Batal
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            @else
+                            <!-- Absensi sudah tidak bisa diisi -->
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-lg">
+                                <div class="flex items-start">
+                                    <svg class="h-6 w-6 text-blue-400 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h3 class="text-sm font-medium text-blue-800">📋 Status Absensi</h3>
+                                        <p class="text-sm text-blue-700 mt-1">
+                                            Tanggal: <strong>{{ $relevantAttendance->tanggal->format('d M Y') }}</strong>
+                                        </p>
+                                        <div class="mt-2 inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold
+                                            {{ $relevantAttendance->status_absensi == 'hadir' ? 'bg-green-100 text-green-800' : '' }}
+                                            {{ $relevantAttendance->status_absensi == 'izin' ? 'bg-blue-100 text-blue-800' : '' }}
+                                            {{ $relevantAttendance->status_absensi == 'sakit' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                            {{ $relevantAttendance->status_absensi == 'alpha' ? 'bg-red-100 text-red-800' : '' }}">
+                                            Status: {{ ucfirst($relevantAttendance->status_absensi) }}
+                                        </div>
+                                        
+                                        @if($relevantAttendance->keterangan)
+                                        <div class="mt-2 text-sm text-blue-700 bg-blue-100 rounded p-2">
+                                            <strong>Keterangan:</strong> {{ $relevantAttendance->keterangan }}
+                                        </div>
+                                        @endif
+                                        
+                                        @php
+                                            $reason = $relevantAttendance->getCannotSubmitReason();
+                                        @endphp
+                                        
+                                        @if($reason)
+                                        <p class="text-xs text-blue-600 mt-3 flex items-start">
+                                            <svg class="w-4 h-4 mr-1 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span>{{ $reason }}</span>
+                                        </p>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                         @endif
                     @endif
                 @endif
-            </div>
+            </div>  
         </div>
     </div>
 </div>

@@ -26,15 +26,8 @@ class AbsensiController extends Controller
 
         // Cek apakah masih bisa absen
         if (!$absensi->canSubmit()) {
-            if ($absensi->isExpired()) {
-                return back()->with('error', 'Waktu absensi telah berakhir');
-            }
-            return back()->with('error', 'Absensi sudah ditutup');
-        }
-
-        // Cek apakah sudah absen
-        if ($absensi->status_absensi !== 'alpha') {
-            return back()->with('error', 'Anda sudah melakukan absensi');
+            $reason = $absensi->getCannotSubmitReason();
+            return back()->with('error', $reason ?? 'Anda tidak dapat melakukan absensi saat ini');
         }
 
         // Update status menjadi hadir
@@ -65,10 +58,8 @@ class AbsensiController extends Controller
 
         // Cek apakah masih bisa submit
         if (!$absensi->canSubmit()) {
-            if ($absensi->isExpired()) {
-                return back()->with('error', 'Waktu absensi telah berakhir');
-            }
-            return back()->with('error', 'Absensi sudah ditutup');
+            $reason = $absensi->getCannotSubmitReason();
+            return back()->with('error', $reason ?? 'Anda tidak dapat mengajukan izin/sakit saat ini');
         }
 
         // Update status
