@@ -24,18 +24,29 @@ class PengumpulanTugas extends Model
         'tgl_pengumpulan' => 'datetime',
     ];
 
-    // Auto-set status berdasarkan deadline
+    // Auto-set status berdasarkan deadline saat creating
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($pengumpulan) {
-            $tugas = Tugas::find($pengumpulan->id_tugas);
-            
-            if ($tugas && $pengumpulan->tgl_pengumpulan > $tugas->deadline) {
-                $pengumpulan->status = 'terlambat';
-            } else {
-                $pengumpulan->status = 'tepat_waktu';
+            // Jika status belum di-set secara manual
+            if (empty($pengumpulan->status)) {
+                $tugas = Tugas::find($pengumpulan->id_tugas);
+                
+                if ($tugas) {
+                    // Set tgl_pengumpulan jika belum ada
+                    if (empty($pengumpulan->tgl_pengumpulan)) {
+                        $pengumpulan->tgl_pengumpulan = now();
+                    }
+                    
+                    // Tentukan status berdasarkan deadline
+                    if ($pengumpulan->tgl_pengumpulan > $tugas->deadline) {
+                        $pengumpulan->status = 'terlambat';
+                    } else {
+                        $pengumpulan->status = 'tepat_waktu';
+                    }
+                }
             }
         });
     }
@@ -49,5 +60,17 @@ class PengumpulanTugas extends Model
     public function siswa()
     {
         return $this->belongsTo(DataSiswa::class, 'id_siswa', 'id_siswa');
+    }
+
+    // Helper method untuk cek apakah sudah dinilai
+    public function isGraded()
+    {
+        return $this->nilai !== null;
+    }
+
+    // Helper method untuk cek apakah terlambat
+    public function isLate()
+    {
+        return $this->status === 'terlambat';
     }
 }

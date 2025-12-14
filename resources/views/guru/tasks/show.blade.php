@@ -198,7 +198,7 @@
 
                                     <!-- Grading Form -->
                                     <div x-show="grading" x-transition class="mt-4 bg-purple-50 p-4 rounded-lg">
-                                        <form action="{{ route('guru.tugas.grade', $submission->id_pengumpulan) }}" method="POST">
+                                        <form action="{{ route('guru.tasks.grade', $submission->id_pengumpulan) }}" method="POST">
                                             @csrf
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                                 <div>

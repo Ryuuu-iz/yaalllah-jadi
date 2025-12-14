@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tugas;
 use App\Models\PengumpulanTugas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TugasController extends Controller
 {
@@ -21,13 +22,21 @@ class TugasController extends Controller
         return view('siswa.tugas.index', compact('courses'));
     }
 
-    public function submit(Request $request, Tugas $tugas)
+    public function submit(Request $request, $id)
     {
         $siswa = auth()->user()->dataSiswa;
         
+        // Validasi siswa memiliki dataSiswa
+        if (!$siswa) {
+            return back()->with('error', 'Student profile not found. Please contact administrator.');
+        }
+
+        // Ambil tugas
+        $tugas = Tugas::findOrFail($id);
+        
         // Cek apakah siswa terdaftar di course ini
         if (!$siswa->courses()->where('course.id_course', $tugas->id_course)->exists()) {
-            abort(403, 'Anda tidak terdaftar di course ini');
+            abort(403, 'You are not enrolled in this course.');
         }
         
         // Cek apakah sudah pernah mengumpulkan
@@ -36,14 +45,16 @@ class TugasController extends Controller
                                     ->first();
         
         if ($existing) {
-            return back()->with('error', 'Anda sudah mengumpulkan tugas ini');
+            return back()->with('error', 'You have already submitted this assignment.');
         }
         
+        // Validasi input
         $validated = $request->validate([
             'file_pengumpulan' => 'nullable|file|mimes:pdf,doc,docx,zip,rar|max:10240',
-            'keterangan' => 'nullable|string',
+            'keterangan' => 'nullable|string|max:500',
         ]);
         
+        // Prepare data
         $data = [
             'id_tugas' => $tugas->id_tugas,
             'id_siswa' => $siswa->id_siswa,
@@ -53,14 +64,60 @@ class TugasController extends Controller
         
         // Upload file jika ada
         if ($request->hasFile('file_pengumpulan')) {
-            $file = $request->file('file_pengumpulan');
-            $filename = time() . '_' . $siswa->id_siswa . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('pengumpulan_tugas', $filename, 'public');
-            $data['file_pengumpulan'] = $path;
+            try {
+                $file = $request->file('file_pengumpulan');
+                $filename = time() . '_' . $siswa->id_siswa . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('pengumpulan_tugas', $filename, 'public');
+                $data['file_pengumpulan'] = $path;
+            } catch (\Exception $e) {
+                return back()->with('error', 'Failed to upload file: ' . $e->getMessage());
+            }
         }
         
-        PengumpulanTugas::create($data);
+        // Tentukan status berdasarkan deadline
+        if (now() > $tugas->deadline) {
+            $data['status'] = 'terlambat';
+        } else {
+            $data['status'] = 'tepat_waktu';
+        }
         
-        return back()->with('success', 'Tugas berhasil dikumpulkan');
+        try {
+            PengumpulanTugas::create($data);
+            return back()->with('success', 'Assignment submitted successfully!');
+        } catch (\Exception $e) {
+            // Hapus file jika gagal menyimpan ke database
+            if (isset($data['file_pengumpulan']) && Storage::disk('public')->exists($data['file_pengumpulan'])) {
+                Storage::disk('public')->delete($data['file_pengumpulan']);
+            }
+            return back()->with('error', 'Failed to submit assignment: ' . $e->getMessage());
+        }
+    }
+
+    public function show($id)
+    {
+        $siswa = auth()->user()->dataSiswa;
+        
+        if (!$siswa) {
+            return back()->with('error', 'Student profile not found. Please contact administrator.');
+        }
+
+        $tugas = Tugas::with([
+            'course.mataPelajaran',
+            'course.kelas',
+            'course.guru',
+            'materi',
+        ])->findOrFail($id);
+        
+        // Cek apakah siswa terdaftar di course ini
+        if (!$siswa->courses()->where('course.id_course', $tugas->id_course)->exists()) {
+            abort(403, 'You are not enrolled in this course.');
+        }
+        
+        // Ambil submission siswa jika ada
+        $submission = PengumpulanTugas::where('id_tugas', $tugas->id_tugas)
+                                     ->where('id_siswa', $siswa->id_siswa)
+                                     ->first();
+        
+        return view('siswa.tugas.show', compact('tugas', 'submission'));
     }
 }

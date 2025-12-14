@@ -129,6 +129,7 @@
         
         // Task Management
         Route::get('/tasks', [SiswaTugasController::class, 'index'])->name('tasks.index');
+        Route::get('/tasks/{task}', [SiswaTugasController::class, 'show'])->name('tasks.show');
         Route::post('/tasks/{task}/submit', [SiswaTugasController::class, 'submit'])->name('tasks.submit');
         
         // Attendance
