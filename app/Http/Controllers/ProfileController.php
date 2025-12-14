@@ -26,50 +26,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update profile information
-     */
-    public function update(Request $request)
-    {
-        $user = auth()->user();
-        
-        // Validation rules
-        $rules = [
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id_user . ',id_user',
-        ];
-        
-        // Add role-specific validation
-        if ($user->role === 'siswa') {
-            $rules['nama'] = 'required|string|max:255';
-            $rules['nisn'] = 'required|string|max:20|unique:data_siswa,nisn,' . $user->dataSiswa->id_siswa . ',id_siswa';
-        } elseif ($user->role === 'guru') {
-            $rules['nama'] = 'required|string|max:255';
-            $rules['nip'] = 'required|string|max:20|unique:data_guru,nip,' . $user->dataGuru->id_guru . ',id_guru';
-        }
-        
-        $validated = $request->validate($rules);
-        
-        // Update username
-        $user->update([
-            'username' => $validated['username'],
-        ]);
-        
-        // Update role-specific data
-        if ($user->role === 'siswa' && $user->dataSiswa) {
-            $user->dataSiswa->update([
-                'nama' => $validated['nama'],
-                'nisn' => $validated['nisn'],
-            ]);
-        } elseif ($user->role === 'guru' && $user->dataGuru) {
-            $user->dataGuru->update([
-                'nama' => $validated['nama'],
-                'nip' => $validated['nip'],
-            ]);
-        }
-        
-        return back()->with('success', 'Profile updated successfully');
-    }
-
-    /**
      * Update password
      */
     public function updatePassword(Request $request)

@@ -1,30 +1,32 @@
 {{-- Admin Sidebar Component --}}
-<aside id="sidebar" class="sidebar w-64 bg-gradient-to-b from-blue-600 to-blue-800 text-white flex-shrink-0 relative will-change-[width]">
-    {{-- Toggle Button --}}
-    <button onclick="toggleSidebar()" class="absolute -right-3 top-6 bg-blue-600 text-white rounded-full p-1 shadow-lg hover:bg-blue-700 z-50 transition-transform duration-300">
-        <svg id="toggle-icon" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+<aside id="sidebar" class="sidebar w-64 bg-gradient-to-b from-blue-600 to-blue-800 text-white flex-shrink-0 relative will-change-[width] overflow-hidden">
+    {{-- Toggle Button (when expanded) --}}
+    <button onclick="toggleSidebar()" id="toggle-btn-expanded" class="absolute right-4 top-6 bg-white/10 backdrop-blur-sm text-white rounded-lg p-2 hover:bg-white/20 z-50 transition-all duration-300">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
         </svg>
     </button>
 
     {{-- Logo Section --}}
-    <a href="{{ route('admin.dashboard') }}" class="block p-6 border-b border-blue-500 hover:bg-blue-700 transition-colors">
-        <div class="flex items-center space-x-3">
-            <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
-                <img src="{{ asset('images/logo-sekolah.png') }}" alt="Logo" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <svg class="w-8 h-8 text-blue-600 hidden" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
-                </svg>
+    <div class="logo-section border-b border-blue-500">
+        <a href="{{ route('admin.dashboard') }}" class="logo-link block p-6 hover:bg-blue-700 transition-colors">
+            <div class="flex items-center justify-center">
+                <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer" onclick="event.preventDefault(); event.stopPropagation(); toggleSidebar()" id="logo-toggle">
+                    <img src="{{ asset('images/logo-sekolah.png') }}" alt="Logo" class="w-10 h-10 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <svg class="w-8 h-8 text-blue-600 hidden" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                    </svg>
+                </div>
+                <div class="sidebar-text ml-3">
+                    <h1 class="text-lg font-bold">SMAN 4 MAROS</h1>
+                    <p class="text-xs text-blue-200">Learning Management System</p>
+                </div>
             </div>
-            <div class="sidebar-text">
-                <h1 class="text-lg font-bold">SMAN 4 MAROS</h1>
-                <p class="text-xs text-blue-200">Learning Management System</p>
-            </div>
-        </div>
-    </a>
+        </a>
+    </div>
 
     {{-- Navigation Menu --}}
-    <nav class="p-4 space-y-2 overflow-y-auto" style="max-height: calc(100vh - 200px);" x-data="{ academicOpen: {{ request()->routeIs('admin.courses.*') || request()->routeIs('admin.subjects.*') || request()->routeIs('admin.classes.*') || request()->routeIs('admin.academic-years.*') ? 'true' : 'false' }} }">
+    <nav class="p-4 space-y-2" style="max-height: calc(100vh - 200px); overflow-y: auto; overflow-x: hidden;" x-data="{ academicOpen: {{ request()->routeIs('admin.courses.*') || request()->routeIs('admin.subjects.*') || request()->routeIs('admin.classes.*') || request()->routeIs('admin.academic-years.*') ? 'true' : 'false' }} }">
         <a href="{{ route('admin.dashboard') }}" class="sidebar-item flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'active' : '' }} transform transition-all duration-200 hover:scale-[1.02]">
             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -131,33 +133,73 @@
     </div>
 </aside>
 
+<style>
+    /* Sidebar collapsed styles */
+    .sidebar.collapsed {
+        width: 80px !important;
+    }
+
+    .sidebar.collapsed .logo-section {
+        padding: 1.5rem 0;
+    }
+
+    .sidebar.collapsed .logo-link {
+        padding: 0 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sidebar.collapsed .sidebar-text {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-item {
+        justify-content: center;
+        padding: 0.75rem !important;
+    }
+
+    .sidebar.collapsed nav {
+        padding: 1rem 0.5rem;
+    }
+
+    .sidebar.collapsed .sidebar-item span {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-item svg {
+        margin: 0;
+    }
+</style>
+
 @push('scripts')
 <script>
 // Restore sidebar state
 document.addEventListener('DOMContentLoaded', function() {
     const sidebar = document.getElementById('sidebar');
-    const icon = document.getElementById('toggle-icon');
+    const toggleBtnExpanded = document.getElementById('toggle-btn-expanded');
     const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
     
-    if (isCollapsed && sidebar && icon) {
+    if (isCollapsed && sidebar) {
         sidebar.classList.add('collapsed');
-        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>';
+        if (toggleBtnExpanded) toggleBtnExpanded.style.display = 'none';
     }
 });
 
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
-    const icon = document.getElementById('toggle-icon');
+    const toggleBtnExpanded = document.getElementById('toggle-btn-expanded');
     
-    if (!sidebar || !icon) return;
+    if (!sidebar) return;
     
     sidebar.classList.toggle('collapsed');
     const isCollapsed = sidebar.classList.contains('collapsed');
     localStorage.setItem('sidebarCollapsed', isCollapsed);
     
-    icon.innerHTML = isCollapsed 
-        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>'
-        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>';
+    // Show/hide toggle button based on state
+    if (toggleBtnExpanded) {
+        toggleBtnExpanded.style.display = isCollapsed ? 'none' : 'block';
+    }
 }
 </script>
 @endpush
