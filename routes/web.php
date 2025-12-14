@@ -96,8 +96,8 @@
         Route::resource('materials', MateriController::class);
         
         // Task Management
-        Route::resource('tugas', TugasController::class);
-        Route::post('/tugas/pengumpulan/{pengumpulan}/grade', [TugasController::class, 'gradeSubmission'])->name('tugas.grade');
+        Route::resource('tasks', TugasController::class);
+        Route::post('/tasks/task/{submissions}/grade', [TugasController::class, 'gradeSubmission'])->name('tasks.grade');
         
         // Attendance Management
         Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
