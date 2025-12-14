@@ -10,7 +10,7 @@
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Attendance Records</h1>
             <p class="text-gray-600 mt-2">Manage all your attendance sessions</p>
         </div>
-        <a href="{{ route('guru.attendance.create') }}" class="inline-flex items-center bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md">
+        <a href="{{ route('guru.attendance.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
@@ -23,7 +23,7 @@
         <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Course</label>
-                <select name="id_course" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-orange-500 focus:ring-orange-500">
+                <select name="id_course" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">All Courses</option>
                     @foreach($courses as $course)
                         <option value="{{ $course->id_course }}" {{ request('id_course') == $course->id_course ? 'selected' : '' }}>
@@ -34,11 +34,11 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                <input type="date" name="tanggal" value="{{ request('tanggal') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-orange-500 focus:ring-orange-500">
+                <input type="date" name="tanggal" value="{{ request('tanggal') }}" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Month</label>
-                <select name="bulan" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-orange-500 focus:ring-orange-500">
+                <select name="bulan" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">All Months</option>
                     @for($i = 1; $i <= 12; $i++)
                         <option value="{{ $i }}" {{ request('bulan') == $i ? 'selected' : '' }}>
@@ -48,7 +48,7 @@
                 </select>
             </div>
             <div class="flex items-end gap-2">
-                <button type="submit" class="flex-1 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     Filter
                 </button>
                 <a href="{{ route('guru.attendance.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
@@ -127,7 +127,7 @@
             </svg>
             <h3 class="text-xl font-semibold text-gray-700 mb-2">No Attendance Records</h3>
             <p class="text-gray-500 mb-6">Start by creating your first attendance session</p>
-            <a href="{{ route('guru.attendance.create') }}" class="inline-flex items-center bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a href="{{ route('guru.attendance.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -156,12 +156,12 @@
                 @endphp
 
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <div class="bg-gradient-to-r from-orange-50 to-orange-100 px-6 py-4 border-b border-orange-200">
+                    <div class="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-4 border-b border-blue-200">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div class="flex items-center gap-4">
                                 <div class="text-center">
-                                    <p class="text-3xl font-bold text-orange-600">{{ $date->format('d') }}</p>
-                                    <p class="text-xs text-orange-500 font-medium">{{ $date->format('M Y') }}</p>
+                                    <p class="text-3xl font-bold text-blue-600">{{ $date->format('d') }}</p>
+                                    <p class="text-xs text-blue-500 font-medium">{{ $date->format('M Y') }}</p>
                                 </div>
                                 <div>
                                     <h3 class="text-lg font-bold text-gray-900">{{ $date->format('l, d F Y') }}</h3>
@@ -212,7 +212,7 @@
                                     <input type="hidden" name="tanggal" value="{{ $date->format('Y-m-d') }}">
                                     <input type="hidden" name="id_course" value="{{ $courseId }}">
                                     <button type="submit" 
-                                            class="text-orange-600 hover:text-orange-800 p-2 rounded-lg hover:bg-orange-50 transition-colors" 
+                                            class="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50 transition-colors" 
                                             title="Close Attendance">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>

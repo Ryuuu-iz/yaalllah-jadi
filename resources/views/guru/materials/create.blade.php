@@ -6,7 +6,7 @@
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('guru.materials.index') }}" class="inline-flex items-center text-green-600 hover:text-green-800 transition-colors">
+        <a href="{{ route('guru.materials.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -23,7 +23,7 @@
     <!-- Form Card -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <!-- Card Header -->
-        <div class="bg-gradient-to-r from-green-500 to-green-700 px-6 py-4">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-4">
             <h2 class="text-xl font-semibold text-white flex items-center">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -47,7 +47,7 @@
                        value="{{ old('nama_materi') }}"
                        required
                        placeholder="e.g., Introduction to Linear Equations"
-                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('nama_materi') border-red-500 @enderror">
+                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('nama_materi') border-red-500 @enderror">
                 @error('nama_materi')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -61,7 +61,7 @@
                 <select name="id_course" 
                         id="id_course" 
                         required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('id_course') border-red-500 @enderror">
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('id_course') border-red-500 @enderror">
                     <option value="">Select a course...</option>
                     @foreach($courses as $course)
                         <option value="{{ $course->id_course }}" {{ old('id_course', request('id_course')) == $course->id_course ? 'selected' : '' }}>
@@ -82,7 +82,7 @@
                 <select name="id_TA" 
                         id="id_TA" 
                         required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('id_TA') border-red-500 @enderror">
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('id_TA') border-red-500 @enderror">
                     <option value="">Select academic year...</option>
                     @foreach($tahunAjaran as $ta)
                         <option value="{{ $ta->id_TA }}" {{ old('id_TA') == $ta->id_TA ? 'selected' : '' }}>
@@ -107,7 +107,7 @@
                           id="desk_materi" 
                           rows="4"
                           placeholder="Describe the content of this material..."
-                          class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('desk_materi') border-red-500 @enderror">{{ old('desk_materi') }}</textarea>
+                          class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('desk_materi') border-red-500 @enderror">{{ old('desk_materi') }}</textarea>
                 @error('desk_materi')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -162,7 +162,7 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                <button type="submit" class="flex-1 sm:flex-initial bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
+                <button type="submit" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                     </svg>
@@ -184,7 +184,7 @@ function displayFileName(input) {
     
     if (fileName) {
         fileNameDisplay.innerHTML = `
-            <span class="flex items-center text-green-600">
+            <span class="flex items-center text-blue-600">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>

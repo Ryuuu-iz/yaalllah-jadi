@@ -6,7 +6,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('guru.tasks.index') }}" class="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors">
+        <a href="{{ route('guru.tasks.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -16,7 +16,7 @@
 
     <!-- Assignment Header -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-        <div class="bg-gradient-to-r from-purple-500 to-purple-700 px-6 py-8">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-8">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2">
@@ -108,7 +108,7 @@
             <!-- Description Card -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
                     </svg>
                     Description
@@ -124,12 +124,12 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                     <h2 class="text-xl font-bold text-gray-800 flex items-center">
-                        <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                         Student Submissions
                     </h2>
-                    <span class="bg-purple-100 text-purple-800 text-sm font-semibold px-3 py-1 rounded-full">
+                    <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">
                         {{ $submissionCount }} of {{ $totalStudents }}
                     </span>
                 </div>
@@ -149,7 +149,7 @@
                             <div class="flex items-start justify-between">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-3 mb-2">
-                                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 font-bold flex-shrink-0">
+                                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold flex-shrink-0">
                                             {{ strtoupper(substr($submission->siswa->nama, 0, 2)) }}
                                         </div>
                                         <div class="min-w-0 flex-1">
@@ -179,7 +179,7 @@
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
                                                 </svg>
-                                                <span class="font-semibold text-purple-600">Grade: {{ $submission->nilai }}/100</span>
+                                                <span class="font-semibold text-blue-600">Grade: {{ $submission->nilai }}/100</span>
                                             </div>
                                         @endif
                                     </div>
@@ -191,27 +191,27 @@
                                     @endif
 
                                     @if($submission->feedback_guru)
-                                    <p class="text-sm text-purple-600 bg-purple-50 p-3 rounded-lg">
+                                    <p class="text-sm text-blue-600 bg-blue-50 p-3 rounded-lg">
                                         <span class="font-medium">Your Feedback:</span> {{ $submission->feedback_guru }}
                                     </p>
                                     @endif
 
                                     <!-- Grading Form -->
-                                    <div x-show="grading" x-transition class="mt-4 bg-purple-50 p-4 rounded-lg">
+                                    <div x-show="grading" x-transition class="mt-4 bg-blue-50 p-4 rounded-lg">
                                         <form action="{{ route('guru.tasks.grade', $submission->id_pengumpulan) }}" method="POST">
                                             @csrf
                                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                                 <div>
                                                     <label class="block text-sm font-medium text-gray-700 mb-2">Grade (0-100)</label>
-                                                    <input type="number" name="nilai" min="0" max="100" value="{{ $submission->nilai }}" required class="w-full border-gray-300 rounded-lg focus:border-purple-500 focus:ring-purple-500">
+                                                    <input type="number" name="nilai" min="0" max="100" value="{{ $submission->nilai }}" required class="w-full border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-500">
                                                 </div>
                                             </div>
                                             <div class="mb-4">
                                                 <label class="block text-sm font-medium text-gray-700 mb-2">Feedback (Optional)</label>
-                                                <textarea name="feedback_guru" rows="3" class="w-full border-gray-300 rounded-lg focus:border-purple-500 focus:ring-purple-500" placeholder="Provide feedback to the student...">{{ $submission->feedback_guru }}</textarea>
+                                                <textarea name="feedback_guru" rows="3" class="w-full border-gray-300 rounded-lg focus:border-blue-500 focus:ring-blue-500" placeholder="Provide feedback to the student...">{{ $submission->feedback_guru }}</textarea>
                                             </div>
                                             <div class="flex gap-2">
-                                                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                                                     Save Grade
                                                 </button>
                                                 <button type="button" @click="grading = false" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
@@ -224,7 +224,7 @@
 
                                 <div class="flex gap-2 ml-4">
                                     @if($submission->file_pengumpulan)
-                                    <a href="{{ Storage::url($submission->file_pengumpulan) }}" target="_blank" class="text-purple-600 hover:text-purple-800 p-2 rounded-lg hover:bg-purple-50 transition-colors" title="Download">
+                                    <a href="{{ Storage::url($submission->file_pengumpulan) }}" target="_blank" class="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50 transition-colors" title="Download">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                         </svg>
@@ -264,7 +264,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-500">Related Material</p>
-                        <a href="{{ route('guru.materials.show', $tugas->materi->id_materi) }}" class="font-semibold text-purple-600 hover:text-purple-800">
+                        <a href="{{ route('guru.materials.show', $tugas->materi->id_materi) }}" class="font-semibold text-blue-600 hover:text-blue-800">
                             {{ $tugas->materi->nama_materi }}
                         </a>
                     </div>
@@ -282,32 +282,32 @@
             </div>
 
             <!-- Statistics Card -->
-            <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg shadow-md p-6 text-white">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-md p-6 text-white">
                 <h3 class="text-lg font-bold mb-4">Statistics</h3>
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-purple-100">Total Students</span>
+                        <span class="text-blue-100">Total Students</span>
                         <span class="text-2xl font-bold">{{ $totalStudents }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-purple-100">Submitted</span>
+                        <span class="text-blue-100">Submitted</span>
                         <span class="text-2xl font-bold">{{ $submissionCount }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-purple-100">Not Submitted</span>
+                        <span class="text-blue-100">Not Submitted</span>
                         <span class="text-2xl font-bold">{{ $totalStudents - $submissionCount }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-purple-100">Graded</span>
+                        <span class="text-blue-100">Graded</span>
                         <span class="text-2xl font-bold">{{ $gradedCount }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-purple-100">Pending Grade</span>
+                        <span class="text-blue-100">Pending Grade</span>
                         <span class="text-2xl font-bold">{{ $submissionCount - $gradedCount }}</span>
                     </div>
                     @if($gradedCount > 0)
-                    <div class="flex items-center justify-between pt-3 border-t border-purple-400">
-                        <span class="text-purple-100">Average Grade</span>
+                    <div class="flex items-center justify-between pt-3 border-t border-blue-400">
+                        <span class="text-blue-100">Average Grade</span>
                         <span class="text-2xl font-bold">{{ number_format($tugas->pengumpulanTugas->whereNotNull('nilai')->avg('nilai'), 1) }}</span>
                     </div>
                     @endif

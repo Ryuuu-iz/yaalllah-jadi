@@ -10,7 +10,7 @@
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Assignments</h1>
             <p class="text-gray-600 mt-2">Manage all your assignments</p>
         </div>
-        <a href="{{ route('guru.tasks.create') }}" class="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md">
+        <a href="{{ route('guru.tasks.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
@@ -23,11 +23,11 @@
         <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search assignments..." class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search assignments..." class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Course</label>
-                <select name="id_course" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">
+                <select name="id_course" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">All Courses</option>
                     @if(auth()->user()->dataGuru)
                         @foreach(auth()->user()->dataGuru->courses as $course)
@@ -40,14 +40,14 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select name="status" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">
+                <select name="status" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">All Status</option>
                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
                     <option value="overdue" {{ request('status') == 'overdue' ? 'selected' : '' }}>Overdue</option>
                 </select>
             </div>
             <div class="flex items-end gap-2">
-                <button type="submit" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     Filter
                 </button>
                 <a href="{{ route('guru.tasks.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
@@ -65,7 +65,7 @@
             </svg>
             <h3 class="text-xl font-semibold text-gray-700 mb-2">No Assignments Found</h3>
             <p class="text-gray-500 mb-6">Start by creating your first assignment</p>
-            <a href="{{ route('guru.tasks.create') }}" class="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a href="{{ route('guru.tasks.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -138,7 +138,7 @@
                                     <span class="text-xs font-medium text-gray-700">{{ $submissionCount }}/{{ $totalStudents }} ({{ number_format($submissionPercentage, 0) }}%)</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2">
-                                    <div class="bg-purple-600 h-2 rounded-full transition-all duration-300" style="width: {{ $submissionPercentage }}%"></div>
+                                    <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: {{ $submissionPercentage }}%"></div>
                                 </div>
                             </div>
 
@@ -182,7 +182,7 @@
 
                         <div class="flex gap-2 ml-4">
                             @if($task->file_tugas)
-                            <a href="{{ Storage::url($task->file_tugas) }}" target="_blank" class="text-purple-600 hover:text-purple-800 p-2 rounded-lg hover:bg-purple-50 transition-colors" title="Download File">
+                            <a href="{{ Storage::url($task->file_tugas) }}" target="_blank" class="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50 transition-colors" title="Download File">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>

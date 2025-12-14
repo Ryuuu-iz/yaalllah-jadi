@@ -6,7 +6,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('guru.materials.index') }}" class="inline-flex items-center text-green-600 hover:text-green-800 transition-colors">
+        <a href="{{ route('guru.materials.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -16,7 +16,7 @@
 
     <!-- Material Header -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-        <div class="bg-gradient-to-r from-green-500 to-green-700 px-6 py-8">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-8">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
                 <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2">
@@ -81,7 +81,7 @@
             <!-- Description Card -->
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
                     </svg>
                     Description
@@ -97,17 +97,17 @@
             @if($materi->file_materi)
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                     </svg>
                     Attached File
                 </h2>
                 <div class="border border-gray-200 rounded-lg p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                             @php
                                 $extension = pathinfo($materi->file_materi, PATHINFO_EXTENSION);
-                                $iconColor = 'text-green-600';
+                                $iconColor = 'text-blue-600';
                             @endphp
                             <svg class="w-6 h-6 {{ $iconColor }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
@@ -118,7 +118,7 @@
                             <p class="text-sm text-gray-500">{{ strtoupper($extension) }} File</p>
                         </div>
                     </div>
-                    <a href="{{ Storage::url($materi->file_materi) }}" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center">
+                    <a href="{{ Storage::url($materi->file_materi) }}" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
@@ -132,7 +132,7 @@
             @if($materi->tugas->isNotEmpty())
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                     </svg>
                     Related Assignments
@@ -220,19 +220,19 @@
             </div>
 
             <!-- Statistics Card -->
-            <div class="bg-gradient-to-br from-green-500 to-green-700 rounded-lg shadow-md p-6 text-white">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg shadow-md p-6 text-white">
                 <h3 class="text-lg font-bold mb-4">Statistics</h3>
                 <div class="space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-green-100">Students in Course</span>
+                        <span class="text-blue-100">Students in Course</span>
                         <span class="text-2xl font-bold">{{ $materi->course->siswa->count() }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-green-100">Related Assignments</span>
+                        <span class="text-blue-100">Related Assignments</span>
                         <span class="text-2xl font-bold">{{ $materi->tugas->count() }}</span>
                     </div>
                     <div class="flex items-center justify-between">
-                        <span class="text-green-100">Days Since Upload</span>
+                        <span class="text-blue-100">Days Since Upload</span>
                         <span class="text-2xl font-bold">{{ $materi->created_at->diffInDays(now()) }}</span>
                     </div>
                 </div>

@@ -6,7 +6,7 @@
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('guru.tasks.index') }}" class="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors">
+        <a href="{{ route('guru.tasks.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -23,7 +23,7 @@
     <!-- Form Card -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <!-- Card Header -->
-        <div class="bg-gradient-to-r from-purple-500 to-purple-700 px-6 py-4">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-4">
             <h2 class="text-xl font-semibold text-white flex items-center">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
@@ -47,7 +47,7 @@
                        value="{{ old('nama_tugas') }}"
                        required
                        placeholder="e.g., Homework: Linear Equations Practice"
-                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 @error('nama_tugas') border-red-500 @enderror">
+                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('nama_tugas') border-red-500 @enderror">
                 @error('nama_tugas')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -62,7 +62,7 @@
                         id="id_course" 
                         x-model="selectedCourse"
                         required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 @error('id_course') border-red-500 @enderror">
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('id_course') border-red-500 @enderror">
                     <option value="">Select a course...</option>
                     @foreach($courses as $course)
                         <option value="{{ $course->id_course }}" 
@@ -85,7 +85,7 @@
                 <select name="id_materi" 
                         id="id_materi" 
                         required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 @error('id_materi') border-red-500 @enderror">
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('id_materi') border-red-500 @enderror">
                     <option value="">Select a material...</option>
                 </select>
                 @error('id_materi')
@@ -103,7 +103,7 @@
                           id="desk_tugas" 
                           rows="5"
                           placeholder="Describe the assignment instructions, requirements, and evaluation criteria..."
-                          class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 @error('desk_tugas') border-red-500 @enderror">{{ old('desk_tugas') }}</textarea>
+                          class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('desk_tugas') border-red-500 @enderror">{{ old('desk_tugas') }}</textarea>
                 @error('desk_tugas')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -121,7 +121,7 @@
                        value="{{ old('deadline') }}"
                        required
                        min="{{ now()->format('Y-m-d\TH:i') }}"
-                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500 @error('deadline') border-red-500 @enderror">
+                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('deadline') border-red-500 @enderror">
                 @error('deadline')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -177,7 +177,7 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                <button type="submit" class="flex-1 sm:flex-initial bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
+                <button type="submit" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
@@ -199,7 +199,7 @@ function displayFileName(input) {
     
     if (fileName) {
         fileNameDisplay.innerHTML = `
-            <span class="flex items-center text-purple-600">
+            <span class="flex items-center text-blue-600">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>

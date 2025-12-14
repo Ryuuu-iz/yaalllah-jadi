@@ -6,7 +6,7 @@
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('guru.attendance.index') }}" class="inline-flex items-center text-orange-600 hover:text-orange-800 transition-colors">
+        <a href="{{ route('guru.attendance.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -23,7 +23,7 @@
     <!-- Form Card -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <!-- Card Header -->
-        <div class="bg-gradient-to-r from-orange-500 to-orange-700 px-6 py-4">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-4">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-white flex items-center">
                     <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +100,7 @@
                            name="deadline" 
                            id="deadline" 
                            value="{{ old('deadline', $deadline ? \Carbon\Carbon::parse($deadline)->format('Y-m-d\TH:i') : '') }}"
-                           class="w-full border-gray-300 rounded-lg shadow-sm focus:border-orange-500 focus:ring-orange-500">
+                           class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <p class="mt-1 text-xs text-gray-500">Leave empty to keep current deadline</p>
                 </div>
 
@@ -110,11 +110,11 @@
                     </label>
                     <div class="flex items-center gap-4 mt-3">
                         <label class="inline-flex items-center">
-                            <input type="radio" name="is_open" value="1" {{ old('is_open', $isOpen) ? 'checked' : '' }} class="text-orange-600 focus:ring-orange-500">
+                            <input type="radio" name="is_open" value="1" {{ old('is_open', $isOpen) ? 'checked' : '' }} class="text-blue-600 focus:ring-blue-500">
                             <span class="ml-2 text-sm font-medium text-gray-700">Open for Students</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="radio" name="is_open" value="0" {{ !old('is_open', $isOpen) ? 'checked' : '' }} class="text-orange-600 focus:ring-orange-500">
+                            <input type="radio" name="is_open" value="0" {{ !old('is_open', $isOpen) ? 'checked' : '' }} class="text-blue-600 focus:ring-blue-500">
                             <span class="ml-2 text-sm font-medium text-gray-700">Closed</span>
                         </label>
                     </div>
@@ -134,7 +134,7 @@
                         @endphp
                         <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div class="flex items-center gap-3 flex-1">
-                                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 font-bold flex-shrink-0">
+                                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold flex-shrink-0">
                                     {{ strtoupper(substr($siswa->nama, 0, 2)) }}
                                 </div>
                                 <div class="min-w-0 flex-1">
@@ -218,7 +218,7 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                <button type="submit" class="flex-1 sm:flex-initial bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
+                <button type="submit" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>

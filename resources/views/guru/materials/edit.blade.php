@@ -6,7 +6,7 @@
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('guru.materials.show', $material->id_materi) }}" class="inline-flex items-center text-green-600 hover:text-green-800 transition-colors">
+        <a href="{{ route('guru.materials.show', $material->id_materi) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -23,7 +23,7 @@
     <!-- Form Card -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <!-- Card Header -->
-        <div class="bg-gradient-to-r from-green-500 to-green-700 px-6 py-4">
+        <div class="bg-gradient-to-r from-blue-500 to-blue-700 px-6 py-4">
             <h2 class="text-xl font-semibold text-white flex items-center">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -48,7 +48,7 @@
                        value="{{ old('nama_materi', $material->nama_materi) }}"
                        required
                        placeholder="e.g., Introduction to Linear Equations"
-                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('nama_materi') border-red-500 @enderror">
+                       class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('nama_materi') border-red-500 @enderror">
                 @error('nama_materi')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -62,7 +62,7 @@
                 <select name="id_course" 
                         id="id_course" 
                         required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('id_course') border-red-500 @enderror">
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('id_course') border-red-500 @enderror">
                     <option value="">Select a course...</option>
                     @foreach($courses as $course)
                         <option value="{{ $course->id_course }}" {{ old('id_course', $material->id_course) == $course->id_course ? 'selected' : '' }}>
@@ -83,7 +83,7 @@
                 <select name="id_TA" 
                         id="id_TA" 
                         required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('id_TA') border-red-500 @enderror">
+                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('id_TA') border-red-500 @enderror">
                     <option value="">Select academic year...</option>
                     @foreach($tahunAjaran as $ta)
                         <option value="{{ $ta->id_TA }}" {{ old('id_TA', $material->id_TA) == $ta->id_TA ? 'selected' : '' }}>
@@ -108,7 +108,7 @@
                           id="desk_materi" 
                           rows="4"
                           placeholder="Describe the content of this material..."
-                          class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 @error('desk_materi') border-red-500 @enderror">{{ old('desk_materi', $material->desk_materi) }}</textarea>
+                          class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('desk_materi') border-red-500 @enderror">{{ old('desk_materi', $material->desk_materi) }}</textarea>
                 @error('desk_materi')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -117,18 +117,18 @@
 
             <!-- Current File Info -->
             @if($material->file_materi)
-            <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
                 <div class="flex items-start">
-                    <svg class="h-5 w-5 text-green-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="h-5 w-5 text-blue-400 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
                     <div class="flex-1">
-                        <h3 class="text-sm font-medium text-green-800">Current File</h3>
+                        <h3 class="text-sm font-medium text-blue-800">Current File</h3>
                         <div class="mt-2 flex items-center justify-between">
-                            <p class="text-sm text-green-700">
+                            <p class="text-sm text-blue-700">
                                 <strong>{{ basename($material->file_materi) }}</strong>
                             </p>
-                            <a href="{{ Storage::url($material->file_materi) }}" target="_blank" class="text-sm text-green-600 hover:text-green-800 font-medium flex items-center">
+                            <a href="{{ Storage::url($material->file_materi) }}" target="_blank" class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
@@ -186,7 +186,7 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                <button type="submit" class="flex-1 sm:flex-initial bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
+                <button type="submit" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors shadow-md flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
@@ -222,7 +222,7 @@ function displayFileName(input) {
     
     if (fileName) {
         fileNameDisplay.innerHTML = `
-            <span class="flex items-center text-green-600">
+            <span class="flex items-center text-blue-600">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>

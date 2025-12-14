@@ -10,7 +10,7 @@
             <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Learning Materials</h1>
             <p class="text-gray-600 mt-2">Manage all your learning materials</p>
         </div>
-        <a href="{{ route('guru.materials.create') }}" class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md">
+        <a href="{{ route('guru.materials.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-md">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
@@ -23,11 +23,11 @@
         <form method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search materials..." class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search materials..." class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Course</label>
-                <select name="id_course" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500">
+                <select name="id_course" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">All Courses</option>
                     @foreach(auth()->user()->dataGuru->courses as $course)
                         <option value="{{ $course->id_course }}" {{ request('id_course') == $course->id_course ? 'selected' : '' }}>
@@ -38,7 +38,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Academic Year</label>
-                <select name="id_TA" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500">
+                <select name="id_TA" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     <option value="">All Years</option>
                     @foreach(\App\Models\TahunAjaran::orderBy('status', 'desc')->get() as $ta)
                         <option value="{{ $ta->id_TA }}" {{ request('id_TA') == $ta->id_TA ? 'selected' : '' }}>
@@ -48,7 +48,7 @@
                 </select>
             </div>
             <div class="flex items-end gap-2">
-                <button type="submit" class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                     Filter
                 </button>
                 <a href="{{ route('guru.materials.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
@@ -66,7 +66,7 @@
             </svg>
             <h3 class="text-xl font-semibold text-gray-700 mb-2">No Materials Found</h3>
             <p class="text-gray-500 mb-6">Start by creating your first learning material</p>
-            <a href="{{ route('guru.materials.create') }}" class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <a href="{{ route('guru.materials.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -82,7 +82,7 @@
                         <div class="flex-1">
                             <div class="flex items-center gap-3 mb-2">
                                 <h3 class="text-xl font-semibold text-gray-900">{{ $material->nama_materi }}</h3>
-                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">
                                     {{ $material->tahunAjaran->semester }}
                                 </span>
                             </div>
@@ -121,7 +121,7 @@
                                 </svg>
                             </a>
                             @endif
-                            <a href="{{ route('guru.materials.show', $material->id_materi) }}" class="text-green-600 hover:text-green-800 p-2 rounded-lg hover:bg-green-50 transition-colors" title="View Details">
+                            <a href="{{ route('guru.materials.show', $material->id_materi) }}" class="text-blue-600 hover:text-blue-800 p-2 rounded-lg hover:bg-blue-50 transition-colors" title="View Details">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
