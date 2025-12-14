@@ -141,12 +141,12 @@
                     @enderror
                 </div>
 
-                <!-- Forgot Password Link -->
+                <!-- Forgot Password Link
                 <div class="text-right mb-6">
                     <a href="" class="text-sm text-white hover:text-gray-200 font-medium transition-colors">
                         Forgot password?
                     </a>
-                </div>
+                </div> -->
 
                 <!-- Login Button -->
                 <button 

@@ -186,12 +186,22 @@
                 @endif
 
                 <!-- Enroll Modal -->
-                <div x-ref="enrollModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                    <div class="bg-white rounded-lg max-w-md w-full p-6" @click.away="$refs.enrollModal.classList.add('hidden')">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Enroll Student</h3>
+                <div x-ref="enrollModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" @click.self="$refs.enrollModal.classList.add('hidden')">
+                    <div class="bg-white rounded-lg max-w-md w-full p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-bold text-gray-900">Enroll Student</h3>
+                            <button @click="$refs.enrollModal.classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
+                        </div>
                         
                         @if($availableStudents->isEmpty())
-                            <p class="text-gray-500 mb-4">No available students to enroll.</p>
+                            <p class="text-gray-500 mb-4">No available students to enroll. All students in the system are already enrolled in this class.</p>
+                            <button @click="$refs.enrollModal.classList.add('hidden')" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors">
+                                Close
+                            </button>
                         @else
                             <form action="{{ route('guru.courses.enroll', $course->id_course) }}" method="POST">
                                 @csrf
@@ -217,6 +227,7 @@
                     </div>
                 </div>
             </div>
+        
 
             <!-- Materials Tab -->
             <div x-show="activeTab === 'materials'" x-transition>

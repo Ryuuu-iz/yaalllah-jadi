@@ -91,7 +91,6 @@
         Route::post('/courses/{course}/regenerate-key', [GuruCourseController::class, 'regenerateKey'])->name('courses.regenerate-key');
         Route::get('/courses/{course}/materials', [GuruCourseController::class, 'getMaterials'])->name('courses.materials');
 
-
         // Material Management
         Route::resource('materials', MateriController::class);
         

@@ -209,10 +209,12 @@ class CourseController extends Controller
             'id_siswa' => 'required|exists:data_siswa,id_siswa',
         ]);
 
-        if ($course->siswa()->where('id_siswa', $validated['id_siswa'])->exists()) {
+        // Cek apakah siswa sudah terdaftar
+        if ($course->siswa()->where('data_siswa.id_siswa', $validated['id_siswa'])->exists()) {
             return back()->with('error', 'Siswa sudah terdaftar di course ini');
         }
 
+        // Enroll siswa
         $course->siswa()->attach($validated['id_siswa'], ['enrolled_at' => now()]);
 
         return back()->with('success', 'Siswa berhasil ditambahkan ke course');
