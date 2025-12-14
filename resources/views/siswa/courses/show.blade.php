@@ -258,7 +258,7 @@
                                         Submit Assignment
                                     </button>
                                     
-                                    <form x-ref="submitForm{{ $tugas->id_tugas }}" action="{{ route('siswa.tugas.submit', $tugas->id_tugas) }}" method="POST" enctype="multipart/form-data" class="hidden mt-4 bg-gray-50 rounded-lg p-4">
+                                    <form x-ref="submitForm{{ $tugas->id_tugas }}" action="{{ route('siswa.tasks.submit', $tugas->id_tugas) }}" method="POST" enctype="multipart/form-data" class="hidden mt-4 bg-gray-50 rounded-lg p-4">
                                         @csrf
                                         <div class="space-y-4">
                                             <div>

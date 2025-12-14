@@ -100,7 +100,13 @@
         Route::post('/tasks/task/{submissions}/grade', [TugasController::class, 'gradeSubmission'])->name('tasks.grade');
         
         // Attendance Management
-        Route::resource('/attendance', AbsensiController::class);
+        Route::get('/attendance', [AbsensiController::class, 'index'])->name('attendance.index');
+        Route::get('/attendance/create', [AbsensiController::class, 'create'])->name('attendance.create');
+        Route::post('/attendance', [AbsensiController::class, 'store'])->name('attendance.store');
+        Route::get('/attendance/edit', [AbsensiController::class, 'edit'])->name('attendance.edit');
+        Route::put('/attendance/update', [AbsensiController::class, 'update'])->name('attendance.update');
+        Route::delete('/attendance/destroy', [AbsensiController::class, 'destroy'])->name('attendance.destroy');
+        Route::post('/attendance/toggle-status', [AbsensiController::class, 'toggleStatus'])->name('attendance.toggle-status');
 
         // Profile 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -123,8 +129,8 @@
         Route::delete('/courses/{course}/leave', [SiswaCourseController::class, 'leave'])->name('courses.leave');
         
         // Task Management
-        Route::get('/tugas', [SiswaTugasController::class, 'index'])->name('tugas.index');
-        Route::post('/tugas/{tugas}/submit', [SiswaTugasController::class, 'submit'])->name('tugas.submit');
+        Route::get('/tasks', [SiswaTugasController::class, 'index'])->name('tasks.index');
+        Route::post('/tasks/{task}/submit', [SiswaTugasController::class, 'submit'])->name('tasks.submit');
         
         // Attendance
         Route::get('/absensi', [SiswaAbsensiController::class, 'index'])->name('absensi.index');
