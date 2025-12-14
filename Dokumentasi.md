@@ -83,3 +83,18 @@ attendance admin ngebug (ui nya masih jelek)
 attendance admin dan siswa, edit absensinya dimana admin bisa membuat absensi, dan siswa bisa mengabsen dirinya sendiri ketika dibuatkan absensi. (done)
 material create, show, edit blade admin, ini keknya dengan kontroller deh(done, tpi button add material ndada wkwk)
 pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah absensinya (bellum)
+
+13/12/2025 9:03 AM
+attendance admin ngebug (ui nya masih jelek)
+material create, show, edit blade admin, ini keknya dengan kontroller deh(done, tpi button add material ndada wkwk)
+pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah absensinya (bellum)
+now kerja role guru
+pada create, edit classes guru, harusnya guru bisa membuat enrollment key untuk coursenya, dan tahun ajarannya 
+
+13/12/2025 7:09 PM
+attendance admin ngebug (ui nya masih jelek)
+material create, show, edit blade admin, ini keknya dengan kontroller deh(done, tpi button add material ndada wkwk)
+pada absensi ketika sudah di alpha oleh guru/admin siswa tidak bisa mengubah absensinya (bellum)
+pada create, edit classes guru, harusnya guru bisa membuat enrollment key untuk coursenya, dan tahun ajarannya (done)
+view materi guru (done)
+sekarang task/assgiment pada saat guru ingin task create, edit, dan show malah muncul error Attempt to read property "id_guru" on null (lanjut esok)

@@ -10,27 +10,43 @@ use Illuminate\Http\Request;
 
 class MateriController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $guru = auth()->user()->dataGuru;
         
-        $materi = MateriPembelajaran::whereHas('course', function($query) use ($guru) {
-            $query->where('id_guru', $guru->id_guru);
-        })
-        ->with(['course', 'tahunAjaran'])
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
+        $query = MateriPembelajaran::whereHas('course', function($q) use ($guru) {
+            $q->where('id_guru', $guru->id_guru);
+        })->with(['course.kelas', 'course.mataPelajaran', 'tahunAjaran']);
         
-        return view('guru.materi.index', compact('materi'));
+        // Filter by search
+        if ($request->filled('search')) {
+            $query->where('nama_materi', 'like', '%' . $request->search . '%');
+        }
+        
+        // Filter by course
+        if ($request->filled('id_course')) {
+            $query->where('id_course', $request->id_course);
+        }
+        
+        // Filter by academic year
+        if ($request->filled('id_TA')) {
+            $query->where('id_TA', $request->id_TA);
+        }
+        
+        $materi = $query->orderBy('created_at', 'desc')->paginate(10);
+        
+        return view('guru.materials.index', compact('materi'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $guru = auth()->user()->dataGuru;
-        $courses = Course::where('id_guru', $guru->id_guru)->get();
-        $tahunAjaran = TahunAjaran::where('status', 'aktif')->get();
+        $courses = Course::where('id_guru', $guru->id_guru)
+            ->with(['kelas', 'mataPelajaran'])
+            ->get();
+        $tahunAjaran = TahunAjaran::orderBy('status', 'desc')->orderBy('created_at', 'desc')->get();
         
-        return view('guru.materi.create', compact('courses', 'tahunAjaran'));
+        return view('guru.materials.create', compact('courses', 'tahunAjaran'));
     }
 
     public function store(Request $request)
@@ -57,43 +73,56 @@ class MateriController extends Controller
             $validated['file_materi'] = $path;
         }
         
-        MateriPembelajaran::create($validated);
+        $materi = MateriPembelajaran::create($validated);
         
-        return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil ditambahkan');
+        return redirect()->route('guru.materials.show', $materi->id_materi)
+            ->with('success', 'Material successfully created');
     }
 
-    public function show(MateriPembelajaran $materi)
+    public function show($id)
     {
+        $materi = MateriPembelajaran::with([
+            'course.mataPelajaran',
+            'course.kelas',
+            'course.siswa',
+            'tahunAjaran',
+            'tugas'
+        ])->findOrFail($id);
+        
         // Verifikasi akses
         $guru = auth()->user()->dataGuru;
         if ($materi->course->id_guru !== $guru->id_guru) {
             abort(403, 'Unauthorized action.');
         }
         
-        $materi->load(['course', 'tahunAjaran', 'tugas']);
-        
-        return view('guru.materi.show', compact('materi'));
+        return view('guru.materials.show', compact('materi'));
     }
 
-    public function edit(MateriPembelajaran $materi)
+    public function edit($id)
     {
+        $material = MateriPembelajaran::findOrFail($id);
+        
         // Verifikasi akses
         $guru = auth()->user()->dataGuru;
-        if ($materi->course->id_guru !== $guru->id_guru) {
+        if ($material->course->id_guru !== $guru->id_guru) {
             abort(403, 'Unauthorized action.');
         }
         
-        $courses = Course::where('id_guru', $guru->id_guru)->get();
-        $tahunAjaran = TahunAjaran::where('status', 'aktif')->get();
+        $courses = Course::where('id_guru', $guru->id_guru)
+            ->with(['kelas', 'mataPelajaran'])
+            ->get();
+        $tahunAjaran = TahunAjaran::orderBy('status', 'desc')->orderBy('created_at', 'desc')->get();
         
-        return view('guru.materi.edit', compact('materi', 'courses', 'tahunAjaran'));
+        return view('guru.materials.edit', compact('material', 'courses', 'tahunAjaran'));
     }
 
-    public function update(Request $request, MateriPembelajaran $materi)
+    public function update(Request $request, $id)
     {
+        $material = MateriPembelajaran::findOrFail($id);
+        
         // Verifikasi akses
         $guru = auth()->user()->dataGuru;
-        if ($materi->course->id_guru !== $guru->id_guru) {
+        if ($material->course->id_guru !== $guru->id_guru) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -105,11 +134,16 @@ class MateriController extends Controller
             'id_TA' => 'required|exists:tahun_ajaran,id_TA',
         ]);
         
+        // Verifikasi course baru juga milik guru
+        $course = Course::where('id_course', $validated['id_course'])
+                       ->where('id_guru', $guru->id_guru)
+                       ->firstOrFail();
+        
         // Upload file baru jika ada
         if ($request->hasFile('file_materi')) {
             // Hapus file lama jika ada
-            if ($materi->file_materi && \Storage::disk('public')->exists($materi->file_materi)) {
-                \Storage::disk('public')->delete($materi->file_materi);
+            if ($material->file_materi && \Storage::disk('public')->exists($material->file_materi)) {
+                \Storage::disk('public')->delete($material->file_materi);
             }
             
             $file = $request->file('file_materi');
@@ -118,26 +152,30 @@ class MateriController extends Controller
             $validated['file_materi'] = $path;
         }
         
-        $materi->update($validated);
+        $material->update($validated);
         
-        return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil diupdate');
+        return redirect()->route('guru.materials.show', $material->id_materi)
+            ->with('success', 'Material successfully updated');
     }
 
-    public function destroy(MateriPembelajaran $materi)
+    public function destroy($id)
     {
+        $material = MateriPembelajaran::findOrFail($id);
+        
         // Verifikasi akses
         $guru = auth()->user()->dataGuru;
-        if ($materi->course->id_guru !== $guru->id_guru) {
+        if ($material->course->id_guru !== $guru->id_guru) {
             abort(403, 'Unauthorized action.');
         }
         
         // Hapus file jika ada
-        if ($materi->file_materi && \Storage::disk('public')->exists($materi->file_materi)) {
-            \Storage::disk('public')->delete($materi->file_materi);
+        if ($material->file_materi && \Storage::disk('public')->exists($material->file_materi)) {
+            \Storage::disk('public')->delete($material->file_materi);
         }
         
-        $materi->delete();
-        
-        return redirect()->route('guru.materi.index')->with('success', 'Materi berhasil dihapus');
+        $material->delete();
+
+        return redirect()->route('guru.materials.index')
+            ->with('success', 'Material successfully deleted');
     }
 }

@@ -67,7 +67,6 @@
         Route::get('/attendance/export', [AdminAttendanceController::class, 'export'])->name('attendance.export');
         Route::post('/attendance/toggle-status', [AdminAttendanceController::class, 'toggleStatus'])->name('attendance.toggle-status');
 
-        
         // Task Management
         Route::resource('tasks', AdminTaskController::class);
         Route::get('/tasks/{task}/submissions', [AdminTaskController::class, 'submissions'])->name('tasks.submissions');
@@ -88,9 +87,13 @@
         // Course Management
         Route::resource('courses', GuruCourseController::class);
         Route::post('/courses/{course}/enroll', [GuruCourseController::class, 'enrollStudent'])->name('courses.enroll');
-        
+        Route::delete('/courses/{course}/students/{id_siswa}', [GuruCourseController::class, 'removeStudent'])->name('courses.remove-student');
+        Route::post('/courses/{course}/regenerate-key', [GuruCourseController::class, 'regenerateKey'])->name('courses.regenerate-key');
+        Route::get('/courses/{course}/materials', [GuruCourseController::class, 'getMaterials'])->name('courses.materials');
+
+
         // Material Management
-        Route::resource('materi', MateriController::class);
+        Route::resource('materials', MateriController::class);
         
         // Task Management
         Route::resource('tugas', TugasController::class);

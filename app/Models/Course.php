@@ -16,6 +16,7 @@ class Course extends Model
         'tgl_upload',
         'id_mapel',
         'id_kelas',
+        'id_TA',
         'enrollment_key',
         'id_guru',
     ];

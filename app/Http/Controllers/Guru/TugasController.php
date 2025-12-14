@@ -11,34 +11,64 @@ use Illuminate\Http\Request;
 
 class TugasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $guru = auth()->user()->dataGuru;
-        $tugas = Tugas::whereHas('course', function($query) use ($guru) {
-            $query->where('id_guru', $guru->id_guru);
-        })->with(['course', 'materi', 'pengumpulanTugas'])->get();
         
-        return view('guru.tugas.index', compact('tugas'));
+        $query = Tugas::whereHas('course', function($q) use ($guru) {
+            $q->where('id_guru', $guru->id_guru);
+        })->with(['course.kelas', 'course.mataPelajaran', 'course.siswa', 'materi', 'pengumpulanTugas']);
+        
+        // Filter by search
+        if ($request->filled('search')) {
+            $query->where('nama_tugas', 'like', '%' . $request->search . '%');
+        }
+        
+        // Filter by course
+        if ($request->filled('id_course')) {
+            $query->where('id_course', $request->id_course);
+        }
+        
+        // Filter by status
+        if ($request->filled('status')) {
+            if ($request->status == 'active') {
+                $query->where('deadline', '>=', now());
+            } elseif ($request->status == 'overdue') {
+                $query->where('deadline', '<', now());
+            }
+        }
+        
+        $tugas = $query->orderBy('deadline', 'desc')->paginate(10);
+        
+        return view('guru.tasks.index', compact('tugas'));
     }
 
     public function create()
     {
         $guru = auth()->user()->dataGuru;
-        $courses = Course::where('id_guru', $guru->id_guru)->get();
+        $courses = Course::where('id_guru', $guru->id_guru)
+            ->with(['kelas', 'mataPelajaran', 'materiPembelajaran'])
+            ->get();
         
-        return view('guru.tugas.create', compact('courses'));
+        return view('guru.tasks.create', compact('courses'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama_tugas' => 'required|string',
+            'nama_tugas' => 'required|string|max:255',
             'desk_tugas' => 'nullable|string',
             'file_tugas' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:10240',
-            'deadline' => 'required|date',
+            'deadline' => 'required|date|after:now',
             'id_course' => 'required|exists:course,id_course',
             'id_materi' => 'required|exists:materi_pembelajaran,id_materi',
         ]);
+        
+        // Verifikasi bahwa course milik guru yang login
+        $guru = auth()->user()->dataGuru;
+        $course = Course::where('id_course', $validated['id_course'])
+                       ->where('id_guru', $guru->id_guru)
+                       ->firstOrFail();
         
         $data = $validated;
         $data['tgl_upload'] = now()->format('Y-m-d');
@@ -51,20 +81,65 @@ class TugasController extends Controller
             $data['file_tugas'] = $path;
         }
         
-        Tugas::create($data);
+        $tugas = Tugas::create($data);
         
-        return redirect()->route('guru.tugas.index')->with('success', 'Tugas berhasil ditambahkan');
+        return redirect()->route('guru.tasks.show', $tugas->id_tugas)
+            ->with('success', 'Assignment successfully created');
     }
 
     public function show(Tugas $tugas)
     {
-        $tugas->load(['course', 'materi', 'pengumpulanTugas.siswa']);
+        // Verifikasi akses
+        $guru = auth()->user()->dataGuru;
+        if ($tugas->course->id_guru !== $guru->id_guru) {
+            abort(403, 'Unauthorized action.');
+        }
         
-        return view('guru.tugas.show', compact('tugas'));
+        $tugas->load([
+            'course.kelas',
+            'course.mataPelajaran',
+            'course.siswa',
+            'materi',
+            'pengumpulanTugas.siswa'
+        ]);
+        
+        return view('guru.tasks.show', compact('tugas'));
+    }
+
+    public function destroy(Tugas $tugas)
+    {
+        // Verifikasi akses
+        $guru = auth()->user()->dataGuru;
+        if ($tugas->course->id_guru !== $guru->id_guru) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        // Delete task file if exists
+        if ($tugas->file_tugas && \Storage::disk('public')->exists($tugas->file_tugas)) {
+            \Storage::disk('public')->delete($tugas->file_tugas);
+        }
+
+        // Delete all submission files
+        foreach ($tugas->pengumpulanTugas as $pengumpulan) {
+            if ($pengumpulan->file_pengumpulan && \Storage::disk('public')->exists($pengumpulan->file_pengumpulan)) {
+                \Storage::disk('public')->delete($pengumpulan->file_pengumpulan);
+            }
+        }
+        
+        $tugas->delete();
+
+        return redirect()->route('guru.tasks.index')
+                        ->with('success', 'Assignment successfully deleted');
     }
 
     public function gradeSubmission(Request $request, PengumpulanTugas $pengumpulan)
     {
+        // Verifikasi akses
+        $guru = auth()->user()->dataGuru;
+        if ($pengumpulan->tugas->course->id_guru !== $guru->id_guru) {
+            abort(403, 'Unauthorized action.');
+        }
+        
         $validated = $request->validate([
             'nilai' => 'required|integer|min:0|max:100',
             'feedback_guru' => 'nullable|string',
@@ -72,6 +147,6 @@ class TugasController extends Controller
         
         $pengumpulan->update($validated);
         
-        return back()->with('success', 'Nilai berhasil diberikan');
+        return back()->with('success', 'Grade successfully saved');
     }
 }

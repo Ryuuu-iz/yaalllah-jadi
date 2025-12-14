@@ -30,15 +30,15 @@ class DashboardController extends Controller
         
         // Course terbaru
         $recentCourses = Course::where('id_guru', $guru->id_guru)
-            ->with(['mataPelajaran', 'kelas'])
+            ->with(['mataPelajaran', 'kelas', 'siswa'])
             ->orderBy('created_at', 'desc')
-            ->take(5)
             ->get();
         
         // Tugas dengan deadline terdekat
         $upcomingTugas = Tugas::whereHas('course', function($query) use ($guru) {
             $query->where('id_guru', $guru->id_guru);
         })
+        ->with(['course.kelas', 'course.mataPelajaran'])
         ->where('deadline', '>=', now())
         ->orderBy('deadline', 'asc')
         ->take(5)
