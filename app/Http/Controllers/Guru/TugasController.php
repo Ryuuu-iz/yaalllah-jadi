@@ -13,6 +13,11 @@ class TugasController extends Controller
 {
     public function index(Request $request)
     {
+        // Cek apakah user memiliki dataGuru
+        if (!auth()->user()->dataGuru) {
+            return redirect()->route('guru.dashboard')->with('error', 'You do not have teacher profile. Please contact administrator.');
+        }
+
         $guru = auth()->user()->dataGuru;
         
         $query = Tugas::whereHas('course', function($q) use ($guru) {
@@ -45,6 +50,11 @@ class TugasController extends Controller
 
     public function create()
     {
+        // Cek apakah user memiliki dataGuru
+        if (!auth()->user()->dataGuru) {
+            return redirect()->route('guru.dashboard')->with('error', 'You do not have teacher profile. Please contact administrator.');
+        }
+
         $guru = auth()->user()->dataGuru;
         $courses = Course::where('id_guru', $guru->id_guru)
             ->with(['kelas', 'mataPelajaran', 'materiPembelajaran'])
@@ -55,6 +65,11 @@ class TugasController extends Controller
 
     public function store(Request $request)
     {
+        // Cek apakah user memiliki dataGuru
+        if (!auth()->user()->dataGuru) {
+            return redirect()->back()->with('error', 'You do not have teacher profile. Please contact administrator.');
+        }
+
         $validated = $request->validate([
             'nama_tugas' => 'required|string|max:255',
             'desk_tugas' => 'nullable|string',
@@ -68,7 +83,11 @@ class TugasController extends Controller
         $guru = auth()->user()->dataGuru;
         $course = Course::where('id_course', $validated['id_course'])
                        ->where('id_guru', $guru->id_guru)
-                       ->firstOrFail();
+                       ->first();
+        
+        if (!$course) {
+            return redirect()->back()->with('error', 'You do not have permission to create assignment for this course.');
+        }
         
         $data = $validated;
         $data['tgl_upload'] = now()->format('Y-m-d');
@@ -87,27 +106,39 @@ class TugasController extends Controller
             ->with('success', 'Assignment successfully created');
     }
 
-    public function show(Tugas $tugas)
+    public function show($id)
     {
+        // Cek apakah user memiliki dataGuru
+        if (!auth()->user()->dataGuru) {
+            return redirect()->route('guru.dashboard')->with('error', 'You do not have teacher profile. Please contact administrator.');
+        }
+
+        $tugas = Tugas::with([
+            'course.kelas',
+            'course.mataPelajaran',
+            'course.siswa',
+            'materi',
+            'pengumpulanTugas.siswa'
+        ])->findOrFail($id);
+
         // Verifikasi akses
         $guru = auth()->user()->dataGuru;
         if ($tugas->course->id_guru !== $guru->id_guru) {
             abort(403, 'Unauthorized action.');
         }
         
-        $tugas->load([
-            'course.kelas',
-            'course.mataPelajaran',
-            'course.siswa',
-            'materi',
-            'pengumpulanTugas.siswa'
-        ]);
-        
         return view('guru.tasks.show', compact('tugas'));
     }
 
-    public function destroy(Tugas $tugas)
+    public function destroy($id)
     {
+        // Cek apakah user memiliki dataGuru
+        if (!auth()->user()->dataGuru) {
+            return redirect()->route('guru.dashboard')->with('error', 'You do not have teacher profile. Please contact administrator.');
+        }
+
+        $tugas = Tugas::findOrFail($id);
+
         // Verifikasi akses
         $guru = auth()->user()->dataGuru;
         if ($tugas->course->id_guru !== $guru->id_guru) {
@@ -132,8 +163,15 @@ class TugasController extends Controller
                         ->with('success', 'Assignment successfully deleted');
     }
 
-    public function gradeSubmission(Request $request, PengumpulanTugas $pengumpulan)
+    public function gradeSubmission(Request $request, $id)
     {
+        // Cek apakah user memiliki dataGuru
+        if (!auth()->user()->dataGuru) {
+            return redirect()->route('guru.dashboard')->with('error', 'You do not have teacher profile. Please contact administrator.');
+        }
+
+        $pengumpulan = PengumpulanTugas::findOrFail($id);
+
         // Verifikasi akses
         $guru = auth()->user()->dataGuru;
         if ($pengumpulan->tugas->course->id_guru !== $guru->id_guru) {

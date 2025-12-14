@@ -139,7 +139,7 @@
                 </h2>
                 <div class="space-y-3">
                     @foreach($materi->tugas as $tugas)
-                    <a href="{{ route('guru.tugas.show', $tugas->id_tugas) }}" class="block border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <a href="{{ route('guru.tasks.show', $tugas->id_tugas) }}" class="block border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                         <div class="flex items-start justify-between">
                             <div class="flex-1">
                                 <h3 class="font-semibold text-gray-900 mb-1">{{ $tugas->nama_tugas }}</h3>
@@ -204,7 +204,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>
-                    <a href="{{ route('guru.tugas.create') }}?id_course={{ $materi->course->id_course }}&id_materi={{ $materi->id_materi }}" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <a href="{{ route('guru.tasks.create') }}?id_course={{ $materi->course->id_course }}&id_materi={{ $materi->id_materi }}" class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                         <span class="text-sm font-medium text-gray-700">Create Assignment</span>
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>

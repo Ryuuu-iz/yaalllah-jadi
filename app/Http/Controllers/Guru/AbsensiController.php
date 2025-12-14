@@ -35,7 +35,7 @@ class AbsensiController extends Controller
         
         $absensi = $query->orderBy('tanggal', 'desc')->paginate(20);
         
-        return view('guru.absensi.index', compact('absensi', 'courses'));
+        return view('guru.attendance.index', compact('absensi', 'courses'));
     }
 
     public function create(Request $request)
@@ -54,7 +54,7 @@ class AbsensiController extends Controller
             $siswaList = $selectedCourse->siswa;
         }
         
-        return view('guru.absensi.create', compact('courses', 'selectedCourse', 'siswaList'));
+        return view('guru.attendance.create', compact('courses', 'selectedCourse', 'siswaList'));
     }
 
     public function store(Request $request)
@@ -94,7 +94,7 @@ class AbsensiController extends Controller
             ]);
         }
         
-        return redirect()->route('guru.absensi.index')->with('success', 'Absensi berhasil disimpan');
+        return redirect()->route('guru.attendance.index')->with('success', 'Absensi berhasil disimpan');
     }
 
     public function edit(Request $request)
@@ -121,7 +121,7 @@ class AbsensiController extends Controller
         
         $courses = Course::where('id_guru', $guru->id_guru)->get();
         
-        return view('guru.absensi.edit', compact('course', 'absensiData', 'courses', 'validated'));
+        return view('guru.attendace.edit', compact('course', 'absensiData', 'courses', 'validated'));
     }
 
     public function update(Request $request)
@@ -148,7 +148,7 @@ class AbsensiController extends Controller
                        ->update(['status_absensi' => $status]);
         }
         
-        return redirect()->route('guru.absensi.index')->with('success', 'Absensi berhasil diupdate');
+        return redirect()->route('guru.attendance.index')->with('success', 'Absensi berhasil diupdate');
     }
 
     public function destroy(Request $request)
@@ -170,6 +170,6 @@ class AbsensiController extends Controller
                    ->whereDate('tanggal', $validated['tanggal'])
                    ->delete();
         
-        return redirect()->route('guru.absensi.index')->with('success', 'Absensi berhasil dihapus');
+        return redirect()->route('guru.attendance.index')->with('success', 'Absensi berhasil dihapus');
     }
 }

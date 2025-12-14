@@ -168,7 +168,7 @@
                                     <span class="ml-4 text-orange-600">({{ $tugas->deadline->diffForHumans() }})</span>
                                 </div>
                             </div>
-                            <a href="{{ route('guru.tugas.show', $tugas->id_tugas) }}" class="ml-4 text-blue-600 hover:text-blue-700 font-medium text-sm">
+                            <a href="{{ route('guru.tasks.show', $tugas->id_tugas) }}" class="ml-4 text-blue-600 hover:text-blue-700 font-medium text-sm">
                                 View Details →
                             </a>
                         </div>

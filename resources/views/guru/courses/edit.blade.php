@@ -297,7 +297,7 @@
             </div>
         </a>
 
-        <a href="{{ route('guru.tugas.create') }}?id_course={{ $course->id_course }}" class="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow border-l-4 border-purple-500">
+        <a href="{{ route('guru.tasks.create') }}?id_course={{ $course->id_course }}" class="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow border-l-4 border-purple-500">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Create</p>
@@ -309,7 +309,7 @@
             </div>
         </a>
 
-        <a href="{{ route('guru.absensi.create') }}?id_course={{ $course->id_course }}" class="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow border-l-4 border-orange-500">
+        <a href="{{ route('guru.attendance.create') }}?id_course={{ $course->id_course }}" class="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow border-l-4 border-orange-500">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Take</p>

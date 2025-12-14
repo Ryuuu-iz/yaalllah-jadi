@@ -100,12 +100,7 @@
         Route::post('/tasks/task/{submissions}/grade', [TugasController::class, 'gradeSubmission'])->name('tasks.grade');
         
         // Attendance Management
-        Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
-        Route::get('/absensi/create', [AbsensiController::class, 'create'])->name('absensi.create');
-        Route::post('/absensi', [AbsensiController::class, 'store'])->name('absensi.store');
-        Route::get('/absensi/edit', [AbsensiController::class, 'edit'])->name('absensi.edit');
-        Route::put('/absensi/update', [AbsensiController::class, 'update'])->name('absensi.update');
-        Route::delete('/absensi/destroy', [AbsensiController::class, 'destroy'])->name('absensi.destroy');
+        Route::resource('/attendance', AbsensiController::class);
 
         // Profile 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

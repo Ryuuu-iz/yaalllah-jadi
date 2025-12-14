@@ -300,7 +300,7 @@
             <div x-show="activeTab === 'assignments'" x-transition>
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-semibold text-gray-800">Assignments</h3>
-                    <a href="{{ route('guru.tugas.create') }}?id_course={{ $course->id_course }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm flex items-center">
+                    <a href="{{ route('guru.tasks.create') }}?id_course={{ $course->id_course }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
@@ -315,7 +315,7 @@
                         </svg>
                         <h3 class="text-lg font-semibold text-gray-700 mb-2">No Assignments Yet</h3>
                         <p class="text-gray-500 mb-4">Create your first assignment for this class.</p>
-                        <a href="{{ route('guru.tugas.create') }}?id_course={{ $course->id_course }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <a href="{{ route('guru.tasks.create') }}?id_course={{ $course->id_course }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -370,13 +370,13 @@
                                     </div>
                                 </div>
                                 <div class="flex gap-2 ml-4">
-                                    <a href="{{ route('guru.tugas.show', $tugas->id_tugas) }}" class="text-blue-600 hover:text-blue-800 p-2" title="View Submissions">
+                                    <a href="{{ route('guru.tasks.show', $tugas->id_tugas) }}" class="text-blue-600 hover:text-blue-800 p-2" title="View Submissions">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                         </svg>
                                     </a>
-                                    <form action="{{ route('guru.tugas.destroy', $tugas->id_tugas) }}" method="POST" class="inline">
+                                    <form action="{{ route('guru.tasks.destroy', $tugas->id_tugas) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" onclick="return confirm('Delete this assignment?')" class="text-red-600 hover:text-red-800 p-2">
@@ -397,7 +397,7 @@
             <div x-show="activeTab === 'attendance'" x-transition>
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-semibold text-gray-800">Attendance Records</h3>
-                    <a href="{{ route('guru.absensi.create') }}?id_course={{ $course->id_course }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm flex items-center">
+                    <a href="{{ route('guru.attendance.create') }}?id_course={{ $course->id_course }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                         </svg>
@@ -412,7 +412,7 @@
                         </svg>
                         <h3 class="text-lg font-semibold text-gray-700 mb-2">No Attendance Records</h3>
                         <p class="text-gray-500 mb-4">Start tracking student attendance for this class.</p>
-                        <a href="{{ route('guru.absensi.create') }}?id_course={{ $course->id_course }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        <a href="{{ route('guru.attendance.create') }}?id_course={{ $course->id_course }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -456,12 +456,12 @@
                                     </div>
                                 </div>
                                 <div class="flex gap-2">
-                                    <a href="{{ route('guru.absensi.edit') }}?id_course={{ $course->id_course }}&tanggal={{ $date }}" class="text-blue-600 hover:text-blue-800 p-2" title="Edit">
+                                    <a href="{{ route('guru.attendance.edit') }}?id_course={{ $course->id_course }}&tanggal={{ $date }}" class="text-blue-600 hover:text-blue-800 p-2" title="Edit">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
                                     </a>
-                                    <form action="{{ route('guru.absensi.destroy') }}" method="POST" class="inline">
+                                    <form action="{{ route('guru.attendance.destroy') }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <input type="hidden" name="id_course" value="{{ $course->id_course }}">
