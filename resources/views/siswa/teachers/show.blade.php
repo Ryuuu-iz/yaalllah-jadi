@@ -140,11 +140,43 @@
                             View Course
                         </a>
                         @else
-                        <div class="text-center">
-                            <p class="text-sm text-gray-500 mb-2">Not enrolled yet</p>
-                            <span class="inline-block bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium">
-                                Enrollment Key Required
-                            </span>
+                        <div x-data="{ showEnrollForm: false }">
+                            <button @click="showEnrollForm = !showEnrollForm" 
+                                class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Enroll in This Course
+                            </button>
+                            
+                            <!-- Enrollment Form -->
+                            <div x-show="showEnrollForm" 
+                                 x-transition
+                                 class="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                <form action="{{ route('siswa.courses.enroll') }}" method="POST">
+                                    @csrf
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Enter Enrollment Key
+                                    </label>
+                                    <p class="text-xs text-gray-500 mb-2">Ask your teacher for the enrollment key to join this course.</p>
+                                    <div class="flex gap-2">
+                                        <input type="text" 
+                                               name="enrollment_key" 
+                                               placeholder="Enter enrollment key" 
+                                               required
+                                               class="flex-1 border-gray-300 rounded-lg shadow-sm focus:border-green-500 focus:ring-green-500 text-sm uppercase">
+                                        <button type="submit" 
+                                                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm whitespace-nowrap">
+                                            Enroll
+                                        </button>
+                                    </div>
+                                    <button type="button" 
+                                            @click="showEnrollForm = false"
+                                            class="mt-2 text-xs text-gray-500 hover:text-gray-700">
+                                        Cancel
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                         @endif
                     </div>

@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\ProfileController;
@@ -121,6 +121,7 @@
     Route::middleware(['auth', 'role:siswa'])->prefix('siswa')->name('siswa.')->group(function () {
         Route::get('/dashboard', [SiswaDashboard::class, 'index'])->name('dashboard');
 
+        // Teachers
         Route::get('/teachers', [SiswaGuruController::class, 'index'])->name('teachers.index');
         Route::get('/teachers/{teacher}', [SiswaGuruController::class, 'show'])->name('teachers.show');
         
@@ -140,7 +141,7 @@
         Route::post('/absensi/submit', [SiswaAbsensiController::class, 'submit'])->name('absensi.submit');
         Route::post('/absensi/request-permission', [SiswaAbsensiController::class, 'requestPermission'])->name('absensi.request-permission');
 
-
+        // Profile
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
         Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.delete-photo');
