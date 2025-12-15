@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
@@ -23,6 +24,56 @@ class ProfileController extends Controller
         }
         
         return view('profile.index', compact('user'));
+    }
+
+    /**
+     * Update foto profile
+     */
+    public function updatePhoto(Request $request)
+    {
+        $request->validate([
+            'foto_profile' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $user = auth()->user();
+
+        // Hapus foto lama jika ada
+        if ($user->foto_profile && Storage::disk('public')->exists($user->foto_profile)) {
+            Storage::disk('public')->delete($user->foto_profile);
+        }
+
+        // Upload foto baru
+        if ($request->hasFile('foto_profile')) {
+            $file = $request->file('foto_profile');
+            $filename = time() . '_' . $user->id_user . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('profile_photos', $filename, 'public');
+            
+            $user->update([
+                'foto_profile' => $path,
+            ]);
+        }
+
+        return back()->with('success', 'Profile photo updated successfully');
+    }
+
+    /**
+     * Delete foto profile
+     */
+    public function deletePhoto()
+    {
+        $user = auth()->user();
+
+        if ($user->foto_profile && Storage::disk('public')->exists($user->foto_profile)) {
+            Storage::disk('public')->delete($user->foto_profile);
+            
+            $user->update([
+                'foto_profile' => null,
+            ]);
+
+            return back()->with('success', 'Profile photo deleted successfully');
+        }
+
+        return back()->with('error', 'No profile photo to delete');
     }
 
     /**

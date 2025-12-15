@@ -160,9 +160,16 @@
                         @foreach($course->siswa as $siswa)
                         <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                             <div class="flex items-start justify-between">
-                                <div class="flex items-center gap-3 flex-1">
-                                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold flex-shrink-0">
-                                        {{ strtoupper(substr($siswa->nama, 0, 2)) }}
+                                <div class="flex items-center gap-3 flex-1 min-w-0">
+                                    <!-- Student Profile Photo -->
+                                    <div class="w-12 h-12 rounded-full overflow-hidden bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                        @if($siswa->user->foto_profile)
+                                            <img src="{{ $siswa->user->getFotoProfileUrl() }}" alt="{{ $siswa->nama }}" class="w-full h-full object-cover">
+                                        @else
+                                            <span class="text-blue-600 font-bold text-lg">
+                                                {{ strtoupper(substr($siswa->nama, 0, 2)) }}
+                                            </span>
+                                        @endif
                                     </div>
                                     <div class="min-w-0 flex-1">
                                         <h4 class="font-semibold text-gray-900 truncate">{{ $siswa->nama }}</h4>

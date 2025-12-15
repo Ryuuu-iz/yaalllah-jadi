@@ -77,6 +77,8 @@
 
         // Profile
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+        Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
+        Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.delete-photo');
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
     });
 
@@ -109,7 +111,8 @@
 
         // Profile 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
-        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
+        Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.delete-photo');
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
 
     });
@@ -139,5 +142,7 @@
 
 
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+        Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
+        Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.delete-photo');
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
     });

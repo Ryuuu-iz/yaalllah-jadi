@@ -16,6 +16,7 @@ class User extends Authenticatable
         'username',
         'password',
         'role',
+        'foto_profile',
     ];
 
     protected $hidden = [
@@ -48,5 +49,14 @@ class User extends Authenticatable
     public function isSiswa()
     {
         return $this->role === 'siswa';
+    }
+
+    // Helper untuk mendapatkan URL foto profile
+    public function getFotoProfileUrl()
+    {
+        if ($this->foto_profile && \Storage::disk('public')->exists($this->foto_profile)) {
+            return asset('storage/' . $this->foto_profile);
+        }
+        return null;
     }
 }

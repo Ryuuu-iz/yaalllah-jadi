@@ -63,11 +63,18 @@
                     </div>
                 </div>
 
-                <!-- User Dropdown -->
+                <!-- User Dropdown with Photo -->
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center space-x-2 hover:text-blue-200 transition-colors focus:outline-none">
-                        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold text-sm">
-                            {{ strtoupper(substr(auth()->user()->username, 0, 1)) }}
+                        <!-- Profile Photo -->
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden bg-white flex items-center justify-center ring-2 ring-white/50">
+                            @if(auth()->user()->foto_profile)
+                                <img src="{{ auth()->user()->getFotoProfileUrl() }}" alt="Profile" class="w-full h-full object-cover">
+                            @else
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                            @endif
                         </div>
                         <svg class="w-4 h-4 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -85,8 +92,22 @@
                          class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50"
                          style="display: none;">
                         <div class="px-4 py-3 border-b border-gray-200">
-                            <p class="text-sm font-medium text-gray-900">{{ auth()->user()->dataGuru->nama ?? auth()->user()->username }}</p>
-                            <p class="text-xs text-gray-500 mt-1">{{ auth()->user()->username }}</p>
+                            <div class="flex items-center gap-3">
+                                <!-- Profile Photo in Dropdown -->
+                                <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center flex-shrink-0">
+                                    @if(auth()->user()->foto_profile)
+                                        <img src="{{ auth()->user()->getFotoProfileUrl() }}" alt="Profile" class="w-full h-full object-cover">
+                                    @else
+                                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    @endif
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-medium text-gray-900 truncate">{{ auth()->user()->dataGuru->nama ?? auth()->user()->username }}</p>
+                                    <p class="text-xs text-gray-500 truncate">{{ auth()->user()->username }}</p>
+                                </div>
+                            </div>
                         </div>
                         <a href="{{ route('guru.profile') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition-colors">
                             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
