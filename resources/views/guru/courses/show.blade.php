@@ -437,6 +437,7 @@
                             Create First Attendance
                         </a>
                     </div>
+                    
                 @else
                     <!-- Attendance Summary -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
@@ -495,20 +496,23 @@
                             <div class="p-5">
                                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                                     @foreach($records as $attendance)
-                                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                        <div class="flex items-center gap-2 min-w-0 flex-1">
-                                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs flex-shrink-0">
-                                                {{ strtoupper(substr($attendance->siswa->nama, 0, 2)) }}
-                                            </div>
-                                            <span class="text-sm font-medium text-gray-900 truncate">{{ $attendance->siswa->nama }}</span>
-                                        </div>
-                                        <span class="px-2 py-1 rounded text-xs font-semibold flex-shrink-0 ml-2
-                                            {{ $attendance->status_absensi == 'hadir' ? 'bg-blue-100 text-blue-800' : '' }}
-                                            {{ $attendance->status_absensi == 'izin' ? 'bg-blue-100 text-blue-800' : '' }}
-                                            {{ $attendance->status_absensi == 'sakit' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                            {{ $attendance->status_absensi == 'alpha' ? 'bg-red-100 text-red-800' : '' }}">
-                                            {{ substr(ucfirst($attendance->status_absensi), 0, 1) }}
+                                    <div class="flex items-center gap-2 min-w-0 flex-1">
+                                    <div class="w-8 h-8 rounded-full overflow-hidden bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                    @if($attendance->siswa->user->foto_profile)
+                                    <img 
+                                        src="{{ $attendance->siswa->user->getFotoProfileUrl() }}" 
+                                        alt="{{ $attendance->siswa->nama }}" 
+                                        class="w-full h-full object-cover"
+                                    >
+                                    @else
+                                        <span class="text-blue-600 font-bold text-xs">
+                                            {{ strtoupper(substr($attendance->siswa->nama, 0, 2)) }}
                                         </span>
+                                    @endif
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-900 truncate">
+                                        {{ $attendance->siswa->nama }}
+                                    </span>
                                     </div>
                                     @endforeach
                                 </div>
