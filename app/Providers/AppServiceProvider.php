@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\View\Composers\AdminDashboardComposer;
+use App\View\Composers\TaskComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,21 @@ class AppServiceProvider extends ServiceProvider
         View::composer(
             'admin.dashboard',
             AdminDashboardComposer::class
+        );
+
+        View::composer(
+            'admin.tasks.*',
+            TaskComposer::class
+        );
+
+        View::composer(
+            'admin.attendance.*',
+            AttendanceComposer::class
+        );
+
+        View::composer(
+            'admin.users.*',
+            UserManagementComposer::class
         );
     }
 }
