@@ -144,23 +144,13 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @php
-                    // Group attendance by date, class, subject, and teacher
-                    $groupedAttendance = $absensi->groupBy(function($item) {
-                        return $item->tanggal->format('Y-m-d') . '|' . $item->id_kelas . '|' . $item->id_mapel . '|' . $item->id_guru;
-                    });
-                @endphp
-
-                @forelse($groupedAttendance as $key => $group)
+                @forelse($groupedAttendance as $key => $groupData)
                     @php
-                        $firstItem = $group->first();
-                        list($date, $classId, $subjectId, $teacherId) = explode('|', $key);
-                        
-                        // Find the course ID
-                        $course = \App\Models\Course::where('id_kelas', $classId)
-                                                    ->where('id_mapel', $subjectId)
-                                                    ->where('id_guru', $teacherId)
-                                                    ->first();
+                        $firstItem = $groupData['firstItem'];
+                        $date = $groupData['date'];
+                        $classId = $groupData['classId'];
+                        $subjectId = $groupData['subjectId'];
+                        $course = $groupData['course'];
                     @endphp
                     
                     <!-- Group Header Row -->
@@ -176,7 +166,7 @@
                                     <span>•</span>
                                     <span>{{ $firstItem->guru->nama }}</span>
                                     <span class="ml-4 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                        {{ $group->count() }} students
+                                        {{ $groupData['attendance']->count() }} students
                                     </span>
                                 </div>
                                 <div class="flex gap-2">
@@ -215,7 +205,7 @@
                     </tr>
                     
                     <!-- Student Rows -->
-                    @foreach($group as $item)
+                    @foreach($groupData['attendance'] as $item)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
                             {{ $item->tanggal->format('d M Y') }}
@@ -234,7 +224,7 @@
                             {{ $item->guru->nama }}
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                 {{ $item->status_absensi == 'hadir' ? 'bg-green-100 text-green-800' : '' }}
                                 {{ $item->status_absensi == 'izin' ? 'bg-blue-100 text-blue-800' : '' }}
                                 {{ $item->status_absensi == 'sakit' ? 'bg-yellow-100 text-yellow-800' : '' }}
