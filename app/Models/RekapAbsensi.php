@@ -48,6 +48,39 @@ class RekapAbsensi extends Model
         return $this->belongsTo(MataPelajaran::class, 'id_mapel', 'id_mapel');
     }
 
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'id_kelas', 'id_kelas')
+                   ->whereColumn('id_mapel', 'id_mapel')
+                   ->whereColumn('id_guru', 'id_guru');
+    }
+
+    // Query Scopes
+    public function scopeFilterByClass($query, $classId)
+    {
+        return $query->where('id_kelas', $classId);
+    }
+
+    public function scopeFilterBySubject($query, $subjectId)
+    {
+        return $query->where('id_mapel', $subjectId);
+    }
+
+    public function scopeFilterByDate($query, $date)
+    {
+        return $query->whereDate('tanggal', $date);
+    }
+
+    public function scopeFilterByMonth($query, $month)
+    {
+        return $query->whereMonth('tanggal', $month);
+    }
+
+    public function scopeFilterByYear($query, $year)
+    {
+        return $query->whereYear('tanggal', $year);
+    }
+
     // Helper methods
     public function isExpired()
     {

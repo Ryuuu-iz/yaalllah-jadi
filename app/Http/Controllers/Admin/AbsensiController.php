@@ -3,51 +3,35 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\RekapAbsensi;
+use App\Http\Requests\StoreAttendanceRequest;
+use App\Http\Requests\UpdateAttendanceRequest;
+use App\Services\AttendanceService;
 use App\Models\Course;
-use App\Models\Kelas;
-use App\Models\MataPelajaran;
+use App\Models\RekapAbsensi;
 use Illuminate\Http\Request;
 
 class AbsensiController extends Controller
 {
+    protected $attendanceService;
+
+    public function __construct(AttendanceService $attendanceService)
+    {
+        $this->attendanceService = $attendanceService;
+    }
+
     public function index(Request $request)
     {
-        $query = RekapAbsensi::with(['siswa', 'kelas', 'guru', 'mataPelajaran']);
-        
-        // Filters
-        if ($request->filled('id_kelas')) {
-            $query->where('id_kelas', $request->id_kelas);
-        }
-        
-        if ($request->filled('id_mapel')) {
-            $query->where('id_mapel', $request->id_mapel);
-        }
-        
-        if ($request->filled('tanggal')) {
-            $query->whereDate('tanggal', $request->tanggal);
-        }
+        $absensi = $this->attendanceService->getAttendanceWithFilters($request);
+        $groupedAttendance = $this->attendanceService->getAttendanceGroupedBySession($absensi);
 
-        if ($request->filled('bulan')) {
-            $query->whereMonth('tanggal', $request->bulan);
-        }
-
-        if ($request->filled('tahun')) {
-            $query->whereYear('tanggal', $request->tahun);
-        }
-        
-        $absensi = $query->orderBy('tanggal', 'desc')->paginate(20);
-        
         // Data for filters
-        $kelas = Kelas::all();
-        $mataPelajaran = MataPelajaran::all();
-        
+        $kelas = $this->attendanceService->getClasses();
+        $mataPelajaran = $this->attendanceService->getSubjects();
+
         // Statistics
-        $stats = RekapAbsensi::selectRaw('status_absensi, COUNT(*) as total')
-                            ->groupBy('status_absensi')
-                            ->pluck('total', 'status_absensi');
-        
-        return view('admin.attendance.index', compact('absensi', 'kelas', 'mataPelajaran', 'stats'));
+        $stats = $this->attendanceService->getAttendanceStats();
+
+        return view('admin.attendance.index', compact('absensi', 'groupedAttendance', 'kelas', 'mataPelajaran', 'stats'));
     }
 
     public function create(Request $request)
