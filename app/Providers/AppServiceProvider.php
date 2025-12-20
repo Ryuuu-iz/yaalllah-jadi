@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\View\Composers\AdminDashboardComposer;
 use App\View\Composers\TaskComposer;
+use App\View\Composers\UserManagementComposer;
+use App\View\Composers\AttendanceComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
