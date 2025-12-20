@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class DataSiswa extends Model
+    class DataSiswa extends Model
 {
+    use HasFactory;
     protected $table = 'data_siswa';
     protected $primaryKey = 'id_siswa';
 

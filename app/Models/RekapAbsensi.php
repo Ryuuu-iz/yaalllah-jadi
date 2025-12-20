@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class RekapAbsensi extends Model
+    class RekapAbsensi extends Model
 {
+    use HasFactory;
     protected $table = 'rekap_absensi';
     protected $primaryKey = 'id_absensi';
 
