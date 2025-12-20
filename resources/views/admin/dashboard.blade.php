@@ -25,7 +25,7 @@
         <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white relative overflow-hidden">
             <div class="relative z-10">
                 <p class="text-sm font-medium opacity-90 mb-2">Total Subject</p>
-                <p class="text-5xl font-bold mb-2">{{ \App\Models\MataPelajaran::count() }}</p>
+                <p class="text-5xl font-bold mb-2">{{ $totalSubjects }}</p>
             </div>
             <div class="absolute right-6 top-1/2 transform -translate-y-1/2 opacity-20">
                 <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 20 20">
@@ -64,7 +64,7 @@
         <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white relative overflow-hidden">
             <div class="relative z-10">
                 <p class="text-sm font-medium opacity-90 mb-2">Academic Year</p>
-                <p class="text-4xl font-bold mb-2">2025 - 2026</p>
+                <p class="text-4xl font-bold mb-2">{{ $academicYearText }}</p>
             </div>
             <div class="absolute right-6 top-1/2 transform -translate-y-1/2 opacity-20">
                 <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 20 20">
@@ -77,7 +77,7 @@
         <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white relative overflow-hidden">
             <div class="relative z-10">
                 <p class="text-sm font-medium opacity-90 mb-2">Total Classes</p>
-                <p class="text-5xl font-bold mb-2">{{ \App\Models\Kelas::count() }}</p>
+                <p class="text-5xl font-bold mb-2">{{ $totalClasses }}</p>
             </div>
             <div class="absolute right-6 top-1/2 transform -translate-y-1/2 opacity-20">
                 <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 20 20">
