@@ -61,7 +61,7 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                             {{ $user->role == 'admin' ? 'bg-purple-100 text-purple-800' : '' }}
                             {{ $user->role == 'guru' ? 'bg-green-100 text-green-800' : '' }}
                             {{ $user->role == 'siswa' ? 'bg-blue-100 text-blue-800' : '' }}">
@@ -98,6 +98,11 @@
                 @endforelse
             </tbody>
         </table>
+
+        <!-- Pagination -->
+        <div class="px-6 py-3 bg-gray-50 border-t border-gray-200">
+            {{ $users->appends(request()->query())->links() }}
+        </div>
     </div>
 </div>
 @endsection
