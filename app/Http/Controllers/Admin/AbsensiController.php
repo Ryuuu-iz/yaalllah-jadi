@@ -24,14 +24,10 @@ class AbsensiController extends Controller
         $absensi = $this->attendanceService->getAttendanceWithFilters($request);
         $groupedAttendance = $this->attendanceService->getAttendanceGroupedBySession($absensi);
 
-        // Data for filters
-        $kelas = $this->attendanceService->getClasses();
-        $mataPelajaran = $this->attendanceService->getSubjects();
-
         // Statistics
         $stats = $this->attendanceService->getAttendanceStats();
 
-        return view('admin.attendance.index', compact('absensi', 'groupedAttendance', 'kelas', 'mataPelajaran', 'stats'));
+        return view('admin.attendance.index', compact('absensi', 'groupedAttendance', 'stats'));
     }
 
     public function create(Request $request)

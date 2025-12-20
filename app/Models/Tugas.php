@@ -39,6 +39,27 @@ class Tugas extends Model
         return $this->hasMany(PengumpulanTugas::class, 'id_tugas', 'id_tugas');
     }
 
+    // Query Scopes
+    public function scopeFilterByCourse($query, $courseId)
+    {
+        return $query->where('id_course', $courseId);
+    }
+
+    public function scopeFilterByStatus($query, $status)
+    {
+        if ($status === 'upcoming') {
+            return $query->where('deadline', '>=', now());
+        } elseif ($status === 'past') {
+            return $query->where('deadline', '<', now());
+        }
+        return $query;
+    }
+
+    public function scopeOrderByDeadlineDesc($query)
+    {
+        return $query->orderBy('deadline', 'desc');
+    }
+
     // Helper method untuk cek status pengumpulan siswa
     public function getPengumpulanBySiswa($id_siswa)
     {
