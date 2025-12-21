@@ -81,11 +81,13 @@ class MaterialService
 
     public function getAllCourses()
     {
-        return Course::with([
-            'mataPelajaran:id_mapel,nama_mapel',
-            'kelas:id_kelas,nama_kelas',
-            'guru:id_guru,nama'
-        ])->select('id_course', 'judul', 'id_mapel', 'id_kelas', 'id_guru')->get();
+        return cache()->remember('all_courses_material_dropdown', 300, function () {
+            return Course::with([
+                'mataPelajaran:id_mapel,nama_mapel',
+                'kelas:id_kelas,nama_kelas',
+                'guru:id_guru,nama'
+            ])->select('id_course', 'judul', 'id_mapel', 'id_kelas', 'id_guru')->get();
+        });
     }
 
     public function getAllAcademicYears()

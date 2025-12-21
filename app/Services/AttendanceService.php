@@ -13,7 +13,12 @@ class AttendanceService
 {
     public function getAttendanceWithFilters(Request $request)
     {
-        $query = RekapAbsensi::with(['siswa', 'kelas', 'guru', 'mataPelajaran', 'course']);
+        $query = RekapAbsensi::with([
+            'siswa:id_siswa,nama,nisn',
+            'kelas:id_kelas,nama_kelas',
+            'guru:id_guru,nama',
+            'mataPelajaran:id_mapel,nama_mapel'
+        ]);
 
         // Filters
         if ($request->filled('id_kelas')) {
@@ -52,12 +57,50 @@ class AttendanceService
             return $item->tanggal->format('Y-m-d') . '|' . $item->id_kelas . '|' . $item->id_mapel . '|' . $item->id_guru;
         });
 
+        $courseKeys = [];
+        foreach ($grouped as $key => $group) {
+            list($date, $classId, $subjectId, $teacherId) = explode('|', $key);
+            $courseKeys[] = ['classId' => $classId, 'subjectId' => $subjectId, 'teacherId' => $teacherId];
+        }
+
+        $uniqueCourseKeys = collect($courseKeys)->unique(function ($item) {
+            return $item['classId'] . '|' . $item['subjectId'] . '|' . $item['teacherId'];
+        })->values();
+
+       
+        $courseLookup = [];
+        if ($uniqueCourseKeys->isNotEmpty()) {
+            $coursesQuery = Course::query();
+
+            foreach ($uniqueCourseKeys as $index => $keyData) {
+                $whereClause = [
+                    'id_kelas' => $keyData['classId'],
+                    'id_mapel' => $keyData['subjectId'],
+                    'id_guru' => $keyData['teacherId']
+                ];
+
+                if ($index === 0) {
+                    $coursesQuery->where($whereClause);
+                } else {
+                    $coursesQuery->orWhere($whereClause);
+                }
+            }
+
+            $courses = $coursesQuery->get();
+
+            foreach ($courses as $course) {
+                $lookupKey = $course->id_kelas . '|' . $course->id_mapel . '|' . $course->id_guru;
+                $courseLookup[$lookupKey] = $course;
+            }
+        }
+
         $result = [];
         foreach ($grouped as $key => $group) {
             $firstItem = $group->first();
             list($date, $classId, $subjectId, $teacherId) = explode('|', $key);
 
-            $course = $this->findCourse($classId, $subjectId, $teacherId);
+            $lookupKey = $classId . '|' . $subjectId . '|' . $teacherId;
+            $course = $courseLookup[$lookupKey] ?? null;
 
             $result[$key] = [
                 'attendance' => $group,
@@ -75,12 +118,12 @@ class AttendanceService
 
     public function getClasses()
     {
-        return Kelas::all();
+        return Kelas::select('id_kelas', 'nama_kelas')->get();
     }
 
     public function getSubjects()
     {
-        return MataPelajaran::all();
+        return MataPelajaran::select('id_mapel', 'nama_mapel')->get();
     }
 
     public function findCourse($classId, $subjectId, $teacherId)

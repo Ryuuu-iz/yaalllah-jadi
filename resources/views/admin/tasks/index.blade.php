@@ -23,7 +23,7 @@
                     <option value="">All Courses</option>
                     @foreach($courses as $course)
                         <option value="{{ $course->id_course }}" {{ request('id_course') == $course->id_course ? 'selected' : '' }}>
-                            {{ $course->judul }} ({{ $course->mataPelajaran->nama_mapel }} - {{ $course->kelas->nama_kelas }})
+                            {{ $course->judul }} ({{ $course->mataPelajaran->nama_mapel ?? 'N/A' }} - {{ $course->kelas->nama_kelas ?? 'N/A' }})
                         </option>
                     @endforeach
                 </select>
@@ -70,11 +70,11 @@
                         <div class="text-sm text-gray-500">{{ Str::limit($task->desk_tugas, 50) }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">{{ $task->course->judul }}</div>
-                        <div class="text-sm text-gray-500">{{ $task->course->mataPelajaran->nama_mapel }} - {{ $task->course->kelas->nama_kelas }}</div>
+                        <div class="text-sm text-gray-900">{{ $task->course->judul ?? 'N/A' }}</div>
+                        <div class="text-sm text-gray-500">{{ $task->course->mataPelajaran->nama_mapel ?? 'N/A' }} - {{ $task->course->kelas->nama_kelas ?? 'N/A' }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ $task->course->guru->nama }}
+                        {{ $task->course->guru->nama ?? 'N/A' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm text-gray-900">{{ $task->deadline->format('d M Y') }}</div>
@@ -87,7 +87,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                            {{ $task->pengumpulanTugas->count() }} submissions
+                            {{ $task->pengumpulan_tugas_count }} submissions
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
