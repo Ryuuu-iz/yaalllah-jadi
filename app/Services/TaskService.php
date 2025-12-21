@@ -12,7 +12,14 @@ class TaskService
 {
     public function getAllTasksWithFilters(Request $request)
     {
-        $query = Tugas::with(['course.mataPelajaran', 'course.kelas', 'course.guru', 'materi']);
+        $query = Tugas::with([
+                'course:id_course,judul,id_mapel,id_kelas,id_guru',
+                'course.mataPelajaran:id_mapel,nama_mapel',
+                'course.kelas:id_kelas,nama_kelas',
+                'course.guru:id_guru,nama',
+                'materi:id_materi,judul'
+            ])
+            ->withCount('pengumpulanTugas'); 
 
         // Filters
         if ($request->filled('id_course')) {
@@ -33,7 +40,6 @@ class TaskService
             'course.kelas',
             'course.guru.user',
             'materi'
-            // Jangan muat pengumpulanTugas di sini karena bisa banyak
         ])->findOrFail($id);
     }
 
@@ -79,7 +85,14 @@ class TaskService
 
     public function getAllCourses()
     {
-        return Course::with(['mataPelajaran', 'kelas', 'guru', 'materiPembelajaran'])->get();
+        return cache()->remember('all_courses_dropdown', 300, function () { // Cache 5 menit
+            return Course::with([
+                'mataPelajaran:id_mapel,nama_mapel',
+                'kelas:id_kelas,nama_kelas',
+                'guru:id_guru,nama'
+                // Hapus 'materiPembelajaran' karena mungkin tidak digunakan di dropdown
+            ])->select('id_course', 'judul', 'id_mapel', 'id_kelas', 'id_guru')->get();
+        });
     }
 
     public function createTask(array $data)
