@@ -8,6 +8,7 @@ use App\View\Composers\AdminDashboardComposer;
 use App\View\Composers\TaskComposer;
 use App\View\Composers\UserManagementComposer;
 use App\View\Composers\AttendanceComposer;
+use App\View\Composers\MaterialComposer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,11 @@ class AppServiceProvider extends ServiceProvider
         View::composer(
             'admin.users.*',
             UserManagementComposer::class
+        );
+
+        View::composer(
+            'admin.materials.*',
+            MaterialComposer::class
         );
     }
 }
