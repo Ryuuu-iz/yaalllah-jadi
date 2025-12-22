@@ -92,6 +92,7 @@ class MaterialService
 
     public function getAllAcademicYears()
     {
-        return TahunAjaran::select('id_TA', 'tahun_ajaran', 'is_active')->get();
+        //return TahunAjaran::select('id_TA', 'tahun_ajaran', 'is_active')->get();
+        return TahunAjaran::select('id_TA')->get();
     }
 }

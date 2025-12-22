@@ -40,6 +40,22 @@ class LmsSeeder extends Seeder
             ]
         );
 
+         $siswa = User::firstOrCreate(
+            ['username' => 'siswa'],
+            [
+                'password' => bcrypt('siswa123'),
+                'role' => 'siswa'
+            ]
+        );
+
+         $guru = User::firstOrCreate(
+            ['username' => 'guru'],
+            [
+                'password' => bcrypt('guru123'),
+                'role' => 'guru'
+            ]
+        );
+
         // 5. Guru Users and DataGuru - hanya buat jika belum cukup
         $existingGuruCount = User::where('role', 'guru')->count();
         $guruUsers = collect();

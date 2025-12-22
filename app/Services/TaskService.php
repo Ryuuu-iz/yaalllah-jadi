@@ -17,7 +17,8 @@ class TaskService
                 'course.mataPelajaran:id_mapel,nama_mapel',
                 'course.kelas:id_kelas,nama_kelas',
                 'course.guru:id_guru,nama',
-                'materi:id_materi,judul'
+            // 'materi:id_materi, judul'
+                'materi:id_materi'
             ])
             ->withCount('pengumpulanTugas'); 
 

@@ -36,7 +36,8 @@ class DashboardService
 
     public function getActiveAcademicYear()
     {
-        $activeAcademicYear = TahunAjaran::where('is_active', true)->first();
-        return $activeAcademicYear ? $activeAcademicYear->tahun_ajaran : '2025 - 2026';
+        // $activeAcademicYear = TahunAjaran::where('is_active', true)->first();
+        // return $activeAcademicYear ? $activeAcademicYear->tahun_ajaran : '2025 - 2026';
+        return '2025 - 2026';
     }
 }
