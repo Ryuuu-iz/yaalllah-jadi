@@ -32,17 +32,21 @@ class GuruController extends Controller
             'courses.kelas',
             'courses.siswa'
         ])->findOrFail($id);
-        
+
         $siswa = auth()->user()->dataSiswa;
-        
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
+
         // Get enrolled and available courses
         $enrolledCourseIds = $siswa->courses->pluck('id_course')->toArray();
-        
+
         $courses = $teacher->courses->map(function($course) use ($enrolledCourseIds) {
             $course->is_enrolled = in_array($course->id_course, $enrolledCourseIds);
             return $course;
         });
-        
+
         return view('siswa.teachers.show', compact('teacher', 'courses'));
     }
 }

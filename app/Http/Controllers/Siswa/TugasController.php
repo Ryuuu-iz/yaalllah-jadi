@@ -13,47 +13,50 @@ class TugasController extends Controller
     public function index()
     {
         $siswa = auth()->user()->dataSiswa;
-        
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
+
         // Ambil semua tugas dari course yang diikuti siswa
         $courses = $siswa->courses()->with(['tugas.materi', 'tugas.pengumpulanTugas' => function($query) use ($siswa) {
             $query->where('id_siswa', $siswa->id_siswa);
         }])->get();
-        
+
         return view('siswa.tugas.index', compact('courses'));
     }
 
     public function submit(Request $request, $id)
     {
         $siswa = auth()->user()->dataSiswa;
-        
-        // Validasi siswa memiliki dataSiswa
+ 
         if (!$siswa) {
-            return back()->with('error', 'Student profile not found. Please contact administrator.');
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
         }
 
         // Ambil tugas
         $tugas = Tugas::findOrFail($id);
-        
+
         // Cek apakah siswa terdaftar di course ini
         if (!$siswa->courses()->where('course.id_course', $tugas->id_course)->exists()) {
             abort(403, 'You are not enrolled in this course.');
         }
-        
+
         // Cek apakah sudah pernah mengumpulkan
         $existing = PengumpulanTugas::where('id_tugas', $tugas->id_tugas)
                                     ->where('id_siswa', $siswa->id_siswa)
                                     ->first();
-        
+
         if ($existing) {
             return back()->with('error', 'You have already submitted this assignment.');
         }
-        
+
         // Validasi input
         $validated = $request->validate([
             'file_pengumpulan' => 'nullable|file|mimes:pdf,doc,docx,zip,rar|max:10240',
             'keterangan' => 'nullable|string|max:500',
         ]);
-        
+
         // Prepare data
         $data = [
             'id_tugas' => $tugas->id_tugas,
@@ -61,7 +64,7 @@ class TugasController extends Controller
             'keterangan' => $validated['keterangan'] ?? null,
             'tgl_pengumpulan' => now(),
         ];
-        
+
         // Upload file jika ada
         if ($request->hasFile('file_pengumpulan')) {
             try {
@@ -73,14 +76,14 @@ class TugasController extends Controller
                 return back()->with('error', 'Failed to upload file: ' . $e->getMessage());
             }
         }
-        
+
         // Tentukan status berdasarkan deadline
         if (now() > $tugas->deadline) {
             $data['status'] = 'terlambat';
         } else {
             $data['status'] = 'tepat_waktu';
         }
-        
+
         try {
             PengumpulanTugas::create($data);
             return back()->with('success', 'Assignment submitted successfully!');
@@ -96,9 +99,9 @@ class TugasController extends Controller
     public function show($id)
     {
         $siswa = auth()->user()->dataSiswa;
-        
+
         if (!$siswa) {
-            return back()->with('error', 'Student profile not found. Please contact administrator.');
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
         }
 
         $tugas = Tugas::with([
@@ -107,17 +110,17 @@ class TugasController extends Controller
             'course.guru',
             'materi',
         ])->findOrFail($id);
-        
+
         // Cek apakah siswa terdaftar di course ini
         if (!$siswa->courses()->where('course.id_course', $tugas->id_course)->exists()) {
             abort(403, 'You are not enrolled in this course.');
         }
-        
+
         // Ambil submission siswa jika ada
         $submission = PengumpulanTugas::where('id_tugas', $tugas->id_tugas)
                                      ->where('id_siswa', $siswa->id_siswa)
                                      ->first();
-        
+
         return view('siswa.tugas.show', compact('tugas', 'submission'));
     }
 }

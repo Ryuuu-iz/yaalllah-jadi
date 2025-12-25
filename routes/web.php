@@ -34,19 +34,25 @@
     Route::post('/login', [LoginController::class, 'login']);
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+    // Profile completion route (available to authenticated users without role restriction)
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/profile/complete', [ProfileController::class, 'showCompletionForm'])->name('profile.complete');
+        Route::post('/profile/complete', [ProfileController::class, 'completeProfile'])->name('profile.complete.submit');
+    });
+
     // Admin routes
     Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
-        
+
         // User Management
         Route::resource('users', UserController::class);
-        
+
         // Course Management
         Route::resource('courses', AdminCourseController::class);
         Route::post('/courses/{course}/enroll', [AdminCourseController::class, 'enrollStudent'])->name('courses.enroll');
         Route::delete('/courses/{course}/students/{id_siswa}', [AdminCourseController::class, 'removeStudent'])->name('courses.remove-student');
         Route::post('/courses/{course}/regenerate-key', [AdminCourseController::class, 'regenerateKey'])->name('courses.regenerate-key');
-        
+
         // Subject Management
         Route::resource('subjects', SubjectController::class)->except(['show']);
 
@@ -56,7 +62,7 @@
         // Academic Year Management
         Route::resource('academic-years', TahunAjaranController::class)->except(['show']);
         Route::post('/academic-years/{id}/toggle-status', [TahunAjaranController::class, 'toggleStatus'])->name('academic-years.toggle-status');
-        
+
         // Attendance Management
         Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('attendance.index');
         Route::get('/attendance/create', [AdminAttendanceController::class, 'create'])->name('attendance.create');
@@ -71,7 +77,7 @@
         // Task Management
         Route::resource('tasks', AdminTaskController::class);
         Route::get('/tasks/{task}/submissions', [AdminTaskController::class, 'submissions'])->name('tasks.submissions');
-        
+
         // Material Management
         Route::resource('materials', AdminMaterialController::class);
 
@@ -83,9 +89,9 @@
     });
 
     // Guru routes
-    Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(function () {
+    Route::middleware(['auth', 'role:guru', 'profile.complete'])->prefix('guru')->name('guru.')->group(function () {
         Route::get('/dashboard', [GuruDashboard::class, 'index'])->name('dashboard');
-        
+
         // Course Management
         Route::resource('courses', GuruCourseController::class);
         Route::post('/courses/{course}/enroll', [GuruCourseController::class, 'enrollStudent'])->name('courses.enroll');
@@ -95,11 +101,11 @@
 
         // Material Management
         Route::resource('materials', MateriController::class);
-        
+
         // Task Management
         Route::resource('tasks', TugasController::class);
         Route::post('/tasks/task/{submissions}/grade', [TugasController::class, 'gradeSubmission'])->name('tasks.grade');
-        
+
         // Attendance Management
         Route::get('/attendance', [AbsensiController::class, 'index'])->name('attendance.index');
         Route::get('/attendance/create', [AbsensiController::class, 'create'])->name('attendance.create');
@@ -109,7 +115,7 @@
         Route::delete('/attendance/destroy', [AbsensiController::class, 'destroy'])->name('attendance.destroy');
         Route::post('/attendance/toggle-status', [AbsensiController::class, 'toggleStatus'])->name('attendance.toggle-status');
 
-        // Profile 
+        // Profile
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
         Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.update-photo');
         Route::delete('/profile/photo', [ProfileController::class, 'deletePhoto'])->name('profile.delete-photo');
@@ -118,24 +124,24 @@
     });
 
     // Siswa routes
-    Route::middleware(['auth', 'role:siswa'])->prefix('siswa')->name('siswa.')->group(function () {
+    Route::middleware(['auth', 'role:siswa', 'profile.complete'])->prefix('siswa')->name('siswa.')->group(function () {
         Route::get('/dashboard', [SiswaDashboard::class, 'index'])->name('dashboard');
 
         // Teachers
         Route::get('/teachers', [SiswaGuruController::class, 'index'])->name('teachers.index');
         Route::get('/teachers/{teacher}', [SiswaGuruController::class, 'show'])->name('teachers.show');
-        
+
         // Course Management
         Route::get('/courses', [SiswaCourseController::class, 'index'])->name('courses.index');
         Route::post('/courses/enroll', [SiswaCourseController::class, 'enroll'])->name('courses.enroll');
         Route::get('/courses/{course}', [SiswaCourseController::class, 'show'])->name('courses.show');
         Route::delete('/courses/{course}/leave', [SiswaCourseController::class, 'leave'])->name('courses.leave');
-        
+
         // Task Management
         Route::get('/tasks', [SiswaTugasController::class, 'index'])->name('tasks.index');
         Route::get('/tasks/{task}', [SiswaTugasController::class, 'show'])->name('tasks.show');
         Route::post('/tasks/{task}/submit', [SiswaTugasController::class, 'submit'])->name('tasks.submit');
-        
+
         // Attendance
         Route::get('/absensi', [SiswaAbsensiController::class, 'index'])->name('absensi.index');
         Route::post('/absensi/submit', [SiswaAbsensiController::class, 'submit'])->name('absensi.submit');
