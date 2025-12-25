@@ -11,10 +11,15 @@ class CourseController extends Controller
     public function index()
     {
         $siswa = auth()->user()->dataSiswa;
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
+
         $courses = $siswa->courses()
                         ->with(['mataPelajaran', 'kelas', 'guru'])
                         ->paginate(10);
-        
+
         return view('siswa.courses.index', compact('courses'));
     }
 
@@ -26,6 +31,10 @@ class CourseController extends Controller
 
         $course = Course::where('enrollment_key', $validated['enrollment_key'])->first();
         $siswa = auth()->user()->dataSiswa;
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
 
         // Cek apakah sudah terdaftar
         if ($siswa->courses()->where('course.id_course', $course->id_course)->exists()) {
@@ -40,7 +49,11 @@ class CourseController extends Controller
     public function show(Course $course)
     {
         $siswa = auth()->user()->dataSiswa;
-        
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
+
         // Cek apakah siswa terdaftar di course ini
         if (!$siswa->courses()->where('course.id_course', $course->id_course)->exists()) {
             abort(403, 'Anda tidak terdaftar di course ini');
@@ -48,18 +61,18 @@ class CourseController extends Controller
 
         // Load relationships
         $course->load([
-            'mataPelajaran', 
-            'kelas', 
-            'guru', 
+            'mataPelajaran',
+            'kelas',
+            'guru',
             'siswa'
         ]);
-        
+
         // Get materials
         $materials = $course->materiPembelajaran()
                            ->with('tahunAjaran')
                            ->orderBy('created_at', 'desc')
                            ->get();
-        
+
         // Get assignments with student's submission
         $assignments = $course->tugas()
                              ->with(['materi', 'pengumpulanTugas' => function($query) use ($siswa) {
@@ -67,7 +80,7 @@ class CourseController extends Controller
                              }])
                              ->orderBy('deadline', 'desc')
                              ->get();
-        
+
         // Get attendance records for this course
         $attendances = $siswa->rekapAbsensi()
                             ->where('id_kelas', $course->id_kelas)
@@ -76,7 +89,7 @@ class CourseController extends Controller
                             ->with('mataPelajaran')
                             ->orderBy('tanggal', 'desc')
                             ->get();
-        
+
         // Attendance statistics
         $attendanceStats = $siswa->rekapAbsensi()
                                 ->where('id_kelas', $course->id_kelas)
@@ -86,15 +99,15 @@ class CourseController extends Controller
                                 ->groupBy('status_absensi')
                                 ->pluck('total', 'status_absensi')
                                 ->toArray();
-        
+
         // Counts
         $materiCount = $materials->count();
         $tugasCount = $assignments->count();
-        
+
         return view('siswa.courses.show', compact(
-            'course', 
-            'materials', 
-            'assignments', 
+            'course',
+            'materials',
+            'assignments',
             'attendances',
             'attendanceStats',
             'materiCount',
@@ -105,15 +118,19 @@ class CourseController extends Controller
     public function leave(Course $course)
     {
         $siswa = auth()->user()->dataSiswa;
-        
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
+
         // Cek apakah siswa terdaftar di course ini
         if (!$siswa->courses()->where('course.id_course', $course->id_course)->exists()) {
             abort(403, 'Anda tidak terdaftar di course ini');
         }
-        
+
         // Hapus enrollment
         $siswa->courses()->detach($course->id_course);
-        
+
         return redirect()->route('siswa.dashboard')->with('success', 'Anda telah keluar dari course: ' . $course->judul);
     }
 }

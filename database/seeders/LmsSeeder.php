@@ -48,6 +48,11 @@ class LmsSeeder extends Seeder
             ]
         );
 
+        // Create DataSiswa for the default 'siswa' user if it doesn't exist
+        if (!$siswa->dataSiswa) {
+            DataSiswa::factory()->create(['id_user' => $siswa->id_user]);
+        }
+
          $guru = User::firstOrCreate(
             ['username' => 'guru'],
             [
@@ -56,6 +61,11 @@ class LmsSeeder extends Seeder
             ]
         );
 
+        // Create DataGuru for the default 'guru' user if it doesn't exist
+        if (!$guru->dataGuru) {
+            DataGuru::factory()->create(['id_user' => $guru->id_user]);
+        }
+
         // 5. Guru Users and DataGuru - hanya buat jika belum cukup
         $existingGuruCount = User::where('role', 'guru')->count();
         $guruUsers = collect();
@@ -63,7 +73,10 @@ class LmsSeeder extends Seeder
             $newGuruCount = 5 - $existingGuruCount;
             $guruUsers = User::factory($newGuruCount)->create(['role' => 'guru']);
             $guruUsers->each(function ($user) {
-                DataGuru::factory()->create(['id_user' => $user->id_user]);
+                // Check if DataGuru already exists for this user to avoid duplicates
+                if (!$user->dataGuru) {
+                    DataGuru::factory()->create(['id_user' => $user->id_user]);
+                }
             });
         }
 
@@ -74,8 +87,27 @@ class LmsSeeder extends Seeder
             $newSiswaCount = 30 - $existingSiswaCount;
             $siswaUsers = User::factory($newSiswaCount)->create(['role' => 'siswa']);
             $siswaUsers->each(function ($user) {
-                DataSiswa::factory()->create(['id_user' => $user->id_user]);
+                // Check if DataSiswa already exists for this user to avoid duplicates
+                if (!$user->dataSiswa) {
+                    DataSiswa::factory()->create(['id_user' => $user->id_user]);
+                }
             });
+        }
+
+        // 6.5 Ensure all existing users have corresponding data records
+        // This handles the case where users were created outside the seeder
+        $allGuruUsers = User::where('role', 'guru')->get();
+        foreach ($allGuruUsers as $guruUser) {
+            if (!$guruUser->dataGuru) {
+                DataGuru::factory()->create(['id_user' => $guruUser->id_user]);
+            }
+        }
+
+        $allSiswaUsers = User::where('role', 'siswa')->get();
+        foreach ($allSiswaUsers as $siswaUser) {
+            if (!$siswaUser->dataSiswa) {
+                DataSiswa::factory()->create(['id_user' => $siswaUser->id_user]);
+            }
         }
 
         // 7. Courses

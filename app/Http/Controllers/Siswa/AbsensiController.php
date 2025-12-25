@@ -19,7 +19,11 @@ class AbsensiController extends Controller
         ]);
 
         $siswa = auth()->user()->dataSiswa;
-        
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
+
         $absensi = RekapAbsensi::where('id_absensi', $validated['id_absensi'])
                               ->where('id_siswa', $siswa->id_siswa)
                               ->firstOrFail();
@@ -51,7 +55,11 @@ class AbsensiController extends Controller
         ]);
 
         $siswa = auth()->user()->dataSiswa;
-        
+
+        if (!$siswa) {
+            return redirect('/profile/complete')->with('error', 'Please complete your student profile to continue.');
+        }
+
         $absensi = RekapAbsensi::where('id_absensi', $validated['id_absensi'])
                               ->where('id_siswa', $siswa->id_siswa)
                               ->firstOrFail();
@@ -69,7 +77,7 @@ class AbsensiController extends Controller
         ]);
 
         $statusText = $validated['status'] === 'izin' ? 'Izin' : 'Sakit';
-        
+
         return back()->with('success', "Pengajuan {$statusText} berhasil dikirim");
     }
 }
